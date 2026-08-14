@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from '../../theme';
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -32,7 +34,8 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4 relative">
+            <ThemeToggle />
             <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-primary mb-2">DT TRADING Admin</h1>
@@ -82,5 +85,19 @@ export default function AdminLogin() {
                 </form>
             </div>
         </div>
+    );
+}
+
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+    return (
+        <button
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+            title={theme === 'dark' ? 'Цайвар горим' : 'Бараан горим'}
+            className="absolute top-5 right-5 w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        >
+            {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
     );
 }

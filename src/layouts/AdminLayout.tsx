@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from '../theme';
 
 export default function AdminLayout() {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const { theme, toggleTheme } = useTheme();
     // null = 세션 확인 중. 확인이 끝나기 전엔 관리자 화면을 그리지 않는다 (깜빡임 방지)
     const [authorized, setAuthorized] = React.useState<boolean | null>(null);
 
@@ -87,7 +90,15 @@ export default function AdminLayout() {
                     >
                         <span className="material-symbols-outlined">menu</span>
                     </button>
-                    <div className="flex items-center gap-4 ml-auto">
+                    <div className="flex items-center gap-3 ml-auto">
+                        <button
+                            onClick={toggleTheme}
+                            aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+                            title={theme === 'dark' ? 'Цайвар горим' : 'Бараан горим'}
+                            className="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                        </button>
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">A</div>
                     </div>
                 </header>
