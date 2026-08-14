@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ChevronDown, X } from 'lucide-react';
+import { ArrowUpDown, ChevronDown, LayoutGrid, List, Rows3, X } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
-import { CarDesktopCard, CarListCard } from '../components/CarCard';
+import { CarDesktopCard, CarGridCard, CarListCard, CarRowCard } from '../components/CarCard';
 import { fuelLabel } from '../constants/company';
 import { getProducts, getSavedIds } from '../utils/storage';
 import type { Product } from '../utils/storage';
@@ -64,6 +64,14 @@ export default function Search() {
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [sortOpen, setSortOpen] = useState(false);
     const [sort, setSort] = useState<SortKey>('recommended');
+    const [view, setView] = useState<'grid' | 'list' | 'compact'>(() => {
+        const stored = localStorage.getItem('dt_view');
+        return stored === 'grid' || stored === 'compact' ? stored : 'list';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('dt_view', view);
+    }, [view]);
 
     useEffect(() => {
         const load = async () => setProducts(await getProducts());
@@ -136,6 +144,13 @@ export default function Search() {
         on: filters[g.key].length > 0,
     }));
 
+    // 모바일 보기 방식 (디자인의 ▦ ☰ ▤ 토글). 선택은 브라우저에 저장.
+    const VIEW_MODES = [
+        { key: 'grid', Icon: LayoutGrid, label: 'Хүснэгт' },
+        { key: 'list', Icon: List, label: 'Жагсаалт' },
+        { key: 'compact', Icon: Rows3, label: 'Товч' },
+    ] as const;
+
     const sortDropdown = (
         <div className="relative">
             <button
@@ -186,10 +201,32 @@ export default function Search() {
                         ))}
                     </div>
                     <div className="flex items-center justify-between gap-2.5 px-4 pt-3">
-                        <div className="text-[13.5px] font-bold flex-none">
+                        <div className="text-[13.5px] font-bold flex-none truncate">
                             {filtered.length} машин{query ? ` · "${query}"` : ''}
                         </div>
-                        {sortDropdown}
+                        <div className="flex items-center gap-2 flex-none">
+                            {/* 정렬: 아이콘 버튼 (기존 바텀시트 재사용) */}
+                            <button
+                                onClick={() => setSortOpen(true)}
+                                aria-label={`Эрэмбэлэх: ${SORT_LABELS[sort]}`}
+                                className={`w-[42px] h-[42px] border rounded-xl bg-surface flex items-center justify-center ${sort !== 'recommended' ? 'border-primary text-primary' : 'border-line text-ink'}`}
+                            >
+                                <ArrowUpDown size={16} />
+                            </button>
+                            {/* 보기 방식 토글 (디자인의 ▦ ☰ ▤) */}
+                            <div className="flex gap-0.5 p-1 border border-line rounded-xl bg-surface">
+                                {VIEW_MODES.map(({ key, Icon, label }) => (
+                                    <button
+                                        key={key}
+                                        onClick={() => setView(key)}
+                                        aria-label={label}
+                                        className={`w-10 h-[34px] rounded-[9px] flex items-center justify-center transition-colors ${view === key ? 'bg-ink-block text-white' : 'text-muted-3'}`}
+                                    >
+                                        <Icon size={15} />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -206,11 +243,25 @@ export default function Search() {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-3 px-4 pt-3">
-                    {filtered.map(car => (
-                        <CarListCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
-                    ))}
-                </div>
+                {view === 'grid' ? (
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-4 px-4 pt-3">
+                        {filtered.map(car => (
+                            <CarGridCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
+                        ))}
+                    </div>
+                ) : view === 'compact' ? (
+                    <div className="flex flex-col gap-2.5 px-4 pt-3">
+                        {filtered.map(car => (
+                            <CarRowCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-3 px-4 pt-3">
+                        {filtered.map(car => (
+                            <CarListCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
+                        ))}
+                    </div>
+                )}
             </main>
 
             {/* ===== 데스크탑 (사이드바 + 3열) ===== */}
@@ -305,6 +356,32 @@ export default function Search() {
                     )}
                 </section>
             </main>
+
+            {/* 모바일 정렬 바텀시트 (데스크탑은 sortDropdown 사용) */}
+            {sortOpen && (
+                <div className="lg:hidden fixed inset-0 z-[55] bg-black/70 flex items-end justify-center" onClick={() => setSortOpen(false)}>
+                    <div className="w-[430px] max-w-full bg-surface rounded-t-[20px] animate-sheet-up" onClick={e => e.stopPropagation()}>
+                        <div className="px-5 pt-[18px] pb-3 flex items-center justify-between border-b border-surface-2">
+                            <div className="text-[17px] font-extrabold tracking-tight">Эрэмбэлэх</div>
+                            <button onClick={() => setSortOpen(false)} aria-label="Хаах" className="w-9 h-9 border-0 rounded-[10px] bg-line text-muted flex items-center justify-center">
+                                <X size={15} />
+                            </button>
+                        </div>
+                        <div className="px-5 pt-1 pb-[26px] flex flex-col">
+                            {SORT_OPTIONS.map(o => (
+                                <button
+                                    key={o.key}
+                                    onClick={() => { setSort(o.key); setSortOpen(false); }}
+                                    className={`w-full min-h-[50px] flex items-center justify-between px-1 border-0 border-b border-surface-2 bg-transparent text-[14.5px] ${sort === o.key ? 'font-extrabold text-primary' : 'font-semibold text-ink-2'}`}
+                                >
+                                    {o.label}
+                                    <span>{sort === o.key ? '✓' : ''}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* 모바일 필터 바텀시트 */}
             {filtersOpen && (
