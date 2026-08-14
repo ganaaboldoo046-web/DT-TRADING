@@ -6,6 +6,15 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DT TRADING - Автомашин Худалдаа</title>
+  <!--
+    Google OAuth 브랜딩 심사는 JS를 실행하지 않고 HTML만 가져가므로,
+    앱 이름과 서비스 목적이 정적 마크업에 드러나 있어야 한다.
+    (이게 없어서 "홈페이지에 목적 설명 없음 / 앱 이름 불일치"로 반려됐다.)
+  -->
+  <meta name="description"
+    content="DT TRADING нь Солонгосоос шалгагдсан хуучин автомашиныг Монголд импортлон худалдаалдаг компани юм. Автомашин хайх, харьцуулах, захиалга өгөх боломжтой. DT TRADING is a used car dealership that imports inspected vehicles from South Korea to Mongolia." />
+  <meta name="application-name" content="DT TRADING" />
+  <link rel="canonical" href="https://dt-trading.kr/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -37,7 +46,37 @@
 </head>
 
 <body>
-  <div id="root" class="fonts-loading"></div>
+  <!--
+    #root 안의 내용은 React가 마운트되면서 교체된다.
+    JS를 실행하지 않는 크롤러/심사 봇은 이 소개문을 보게 된다.
+    (숨김 처리하지 않는다 — 감춘 텍스트는 스팸으로 취급될 수 있다.)
+  -->
+  <div id="root">
+    <div style="max-width:720px;margin:0 auto;padding:40px 20px;font-family:Manrope,sans-serif">
+      <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.02em">DT TRADING</h1>
+      <p style="font-size:15px;line-height:1.7">
+        DT TRADING нь Солонгосоос шалгагдсан хуучин автомашиныг Монголд импортлон худалдаалдаг компани юм.
+        Хэрэглэгч манай вэбсайтаар автомашин хайх, үнэ болон үзүүлэлтийг харьцуулах, захиалга өгөх боломжтой.
+        Гаалийн бүрдүүлэлт, тээвэр, улсын бүртгэлийн ажиллагааг бид хариуцна.
+      </p>
+      <p style="font-size:15px;line-height:1.7">
+        DT TRADING is a used car dealership that imports inspected used vehicles from South Korea to Mongolia.
+        Visitors can browse listings, compare prices and specifications, and place an order.
+        Customers may optionally sign in with Google to save listings and track their orders.
+      </p>
+      <p style="font-size:14px">
+        <a href="/about">Бидний тухай</a> ·
+        <a href="/privacy">Нууцлалын бодлого</a> ·
+        <a href="/terms">Үйлчилгээний нөхцөл</a>
+      </p>
+      <p style="font-size:14px">Холбоо барих: 010 7755 0118 / 010 8460 5703 · sonorsinister@gmail.com</p>
+    </div>
+  </div>
+  <script>
+    /* 폰트 로딩 중 깜빡임 방지. JS가 동작할 때만 적용해야
+       크롤러에게 위 소개문이 opacity:0으로 감춰지지 않는다. */
+    document.getElementById('root').className = 'fonts-loading';
+  </script>
   <script type="module" src="/src/main.tsx"></script>
   <script>
     /* 폰트가 모두 로드되면 화면 표시 (최대 2초 대기 후 강제 표시) */
