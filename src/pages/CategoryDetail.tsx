@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChevronDown, X } from 'lucide-react';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
-import { CarListCard } from '../components/CarCard';
+import { CarDesktopCard, CarListCard } from '../components/CarCard';
 import { getCategories, getProducts, getSavedIds } from '../utils/storage';
 import type { Category, Product } from '../utils/storage';
 
@@ -60,9 +61,12 @@ export default function CategoryDetail() {
     return (
         <div className="min-h-screen bg-app text-ink">
             <Header title={category?.name || 'Ангилал'} hideLogo showBack />
-            <main className="pb-24">
-                <div className="flex items-center justify-between gap-2.5 px-4 pt-3">
-                    <div className="text-[13.5px] font-bold flex-none">{sorted.length} машин</div>
+            <main className="max-w-[1280px] mx-auto pb-24 lg:pb-20 lg:px-6 lg:pt-8">
+                <h1 className="hidden lg:block m-0 mb-5 text-[30px] font-extrabold tracking-tight">
+                    {category?.name || 'Ангилал'}
+                </h1>
+                <div className="flex items-center justify-between gap-2.5 px-4 lg:px-0 pt-3 lg:pt-0">
+                    <div className="text-[13.5px] lg:text-sm font-bold flex-none">{sorted.length} машин</div>
                     <button
                         onClick={() => setSortOpen(true)}
                         className="flex items-center gap-2.5 h-[42px] px-3.5 border border-line rounded-xl bg-surface text-[13px] font-bold text-ink whitespace-nowrap"
@@ -77,21 +81,33 @@ export default function CategoryDetail() {
                         <div className="w-9 h-9 border-4 border-line border-t-primary rounded-full animate-spin" />
                     </div>
                 ) : sorted.length === 0 ? (
-                    <div className="mx-4 my-3 bg-surface border border-line rounded-2xl px-5 py-12 text-center">
+                    <div className="mx-4 lg:mx-0 my-3 lg:my-4 bg-surface border border-line rounded-2xl px-5 py-12 lg:py-16 text-center">
                         <div className="text-[15px] font-extrabold">Энэ ангилалд зар алга</div>
                         <div className="mt-1.5 text-[13px] text-muted">Удахгүй шинэ зар нэмэгдэнэ.</div>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-3 px-4 pt-3">
-                        {sorted.map(car => (
-                            <CarListCard
-                                key={car.id}
-                                product={car}
-                                saved={savedIds.includes(car.id)}
-                                onSavedChange={() => setSavedIds(getSavedIds())}
-                            />
-                        ))}
-                    </div>
+                    <>
+                        <div className="lg:hidden flex flex-col gap-3 px-4 pt-3">
+                            {sorted.map(car => (
+                                <CarListCard
+                                    key={car.id}
+                                    product={car}
+                                    saved={savedIds.includes(car.id)}
+                                    onSavedChange={() => setSavedIds(getSavedIds())}
+                                />
+                            ))}
+                        </div>
+                        <div className="hidden lg:grid grid-cols-4 gap-4 pt-4">
+                            {sorted.map(car => (
+                                <CarDesktopCard
+                                    key={car.id}
+                                    product={car}
+                                    saved={savedIds.includes(car.id)}
+                                    onSavedChange={() => setSavedIds(getSavedIds())}
+                                />
+                            ))}
+                        </div>
+                    </>
                 )}
             </main>
 
@@ -120,6 +136,7 @@ export default function CategoryDetail() {
                 </div>
             )}
 
+            <Footer />
             <BottomNav />
         </div>
     );

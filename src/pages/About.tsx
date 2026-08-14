@@ -21,12 +21,12 @@ const REASONS = [
 ];
 
 const STRIP = [
-    { label: 'ЗУРАГ 01', h: 180, w: 140, image: '/about.jpg' },
-    { label: 'ЗУРАГ 02', h: 230, w: 175, image: '/629659718_930285069576307_7594762200449531737_n.jpg' },
-    { label: 'ЗУРАГ 03', h: 195, w: 205 },
-    { label: 'ЗУРАГ 04', h: 245, w: 170 },
-    { label: 'ЗУРАГ 05', h: 170, w: 215 },
-    { label: 'ЗУРАГ 06', h: 210, w: 160 },
+    { label: 'ЗУРАГ 01', h: 180, w: 140, lgH: 260, lgW: 200, image: '/about.jpg' },
+    { label: 'ЗУРАГ 02', h: 230, w: 175, lgH: 330, lgW: 250, image: '/629659718_930285069576307_7594762200449531737_n.jpg' },
+    { label: 'ЗУРАГ 03', h: 195, w: 205, lgH: 280, lgW: 295 },
+    { label: 'ЗУРАГ 04', h: 245, w: 170, lgH: 350, lgW: 245 },
+    { label: 'ЗУРАГ 05', h: 170, w: 215, lgH: 245, lgW: 310 },
+    { label: 'ЗУРАГ 06', h: 210, w: 160, lgH: 300, lgW: 230 },
 ];
 
 const STATS = [
@@ -42,29 +42,29 @@ export default function About() {
     return (
         <div className="min-h-screen bg-app text-ink">
             <Header />
-            <main className="pb-8">
+            <main className="pb-8 lg:pb-24">
                 {/* 히어로 */}
-                <section className="px-4 pt-10">
-                    <div data-reveal="1" className="text-[11.5px] font-extrabold tracking-[0.16em] text-primary">
+                <section className="max-w-[1180px] mx-auto px-4 lg:px-6 pt-10 lg:pt-24">
+                    <div data-reveal="1" className="text-[11.5px] lg:text-[13px] font-extrabold tracking-[0.16em] text-primary">
                         {COMPANY.name}
                     </div>
                     <h1
                         data-reveal="1"
                         style={{ transitionDelay: '0.08s' }}
-                        className="mt-3.5 text-[34px] leading-[1.22] font-extrabold tracking-tight [text-wrap:balance]"
+                        className="mt-3.5 lg:mt-6 text-[34px] lg:text-[60px] leading-[1.22] lg:leading-[1.18] font-extrabold tracking-tight lg:tracking-[-0.04em] max-w-[20ch] [text-wrap:balance]"
                     >
                         Таны итгэлтэй автомашины сонголт
                     </h1>
-                    <div data-reveal="1" style={{ transitionDelay: '0.16s' }} className="flex gap-2 mt-6">
+                    <div data-reveal="1" style={{ transitionDelay: '0.16s' }} className="flex gap-2 lg:gap-2.5 mt-6 lg:mt-9">
                         <Link
                             to="/search"
-                            className="h-12 px-[22px] flex-none border-0 rounded-3xl bg-primary text-white text-sm font-bold flex items-center active:scale-95 transition-transform"
+                            className="h-12 lg:h-[52px] px-[22px] lg:px-7 flex-none border-0 rounded-3xl lg:rounded-[26px] bg-primary text-white text-sm lg:text-[15px] font-bold flex items-center whitespace-nowrap hover:bg-primary-dark transition-colors"
                         >
                             Автомашин үзэх
                         </Link>
                         <a
                             href="tel:01077550118"
-                            className="flex items-center h-12 px-[22px] border border-line-2 rounded-3xl text-ink text-sm font-bold"
+                            className="flex items-center h-12 lg:h-[52px] px-[22px] lg:px-7 border border-line-2 rounded-3xl lg:rounded-[26px] text-ink text-sm lg:text-[15px] font-bold whitespace-nowrap"
                         >
                             Холбоо барих
                         </a>
@@ -72,8 +72,11 @@ export default function About() {
                 </section>
 
                 {/* 소개 문단 */}
-                <section className="px-4 pt-12">
-                    <p data-reveal="1" className="m-0 text-xl leading-[1.6] font-bold tracking-tight text-muted-3 [text-wrap:pretty]">
+                <section className="max-w-[1180px] mx-auto px-4 lg:px-6 pt-12 lg:pt-24">
+                    <p
+                        data-reveal="1"
+                        className="m-0 text-xl lg:text-[30px] leading-[1.6] font-bold tracking-tight lg:tracking-[-0.03em] text-muted-3 max-w-[44ch] [text-wrap:pretty]"
+                    >
                         DT TRADING нь хэрэглэгч бүрийн хэрэгцээ, төсөвт тохирсон чанартай хуучин автомашиныг санал болгодог
                         автомашины худалдааны компани юм. Бид автомашин бүрийн мэдээллийг ойлгомжтой, ил тод хүргэж,
                         сонголтоос эхлээд худалдан авалт хүртэлх үйл явцад найдвартай зөвлөгөө, шуурхай үйлчилгээг
@@ -82,19 +85,23 @@ export default function About() {
                 </section>
 
                 {/* 이미지 마퀴 */}
-                <section className="pt-10 overflow-hidden">
-                    <div className="flex gap-3 items-center w-max animate-marquee">
+                <section className="pt-10 lg:pt-[72px] overflow-hidden">
+                    <div className="flex gap-3 lg:gap-5 items-center w-max animate-marquee">
                         {[...STRIP, ...STRIP].map((p, i) => (
                             <div
                                 key={i}
-                                className="flex-none rounded-[14px] bg-surface-2 flex items-end p-3 overflow-hidden relative"
-                                style={{ width: p.w, height: p.h }}
+                                className="flex-none rounded-[14px] lg:rounded-[18px] bg-surface-2 flex items-end p-3 lg:p-4 overflow-hidden relative w-[var(--w)] h-[var(--h)] lg:w-[var(--lgw)] lg:h-[var(--lgh)]"
+                                style={{
+                                    '--w': `${p.w}px`,
+                                    '--h': `${p.h}px`,
+                                    '--lgw': `${p.lgW}px`,
+                                    '--lgh': `${p.lgH}px`,
+                                } as React.CSSProperties}
                             >
-                                {p.image && (
+                                {p.image ? (
                                     <img src={p.image} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                                )}
-                                {!p.image && (
-                                    <span className="text-[10px] font-bold tracking-[0.14em] text-muted-3">{p.label}</span>
+                                ) : (
+                                    <span className="text-[10px] lg:text-[11px] font-bold tracking-[0.14em] text-muted-3">{p.label}</span>
                                 )}
                             </div>
                         ))}
@@ -102,89 +109,109 @@ export default function About() {
                 </section>
 
                 {/* 미션 / 비전 */}
-                <section className="px-4 pt-12 flex flex-col gap-8">
-                    <div data-reveal="1">
-                        <div className="text-[12.5px] font-extrabold">Бидний эрхэм зорилго</div>
-                        <p className="mt-3 m-0 text-lg leading-[1.55] font-bold tracking-tight [text-wrap:pretty]">
-                            Хэрэглэгчдэд найдвартай мэдээлэл, зөв сонголт, хариуцлагатай үйлчилгээг хүргэж, автомашин
-                            худалдан авах үйл явцыг илүү хялбар, ойлгомжтой болгоно.
-                        </p>
-                    </div>
-                    <div data-reveal="1" style={{ transitionDelay: '0.08s' }}>
-                        <div className="text-[12.5px] font-extrabold">Бидний алсын хараа</div>
-                        <p className="mt-3 m-0 text-lg leading-[1.55] font-bold tracking-tight [text-wrap:pretty]">
-                            Монголын хуучин автомашины худалдааны салбарт итгэлцэл, ил тод байдал, чанартай үйлчилгээний
-                            шинэ стандартыг бий болгоно.
-                        </p>
+                <section className="max-w-[1180px] mx-auto px-4 lg:px-6 pt-12 lg:pt-[100px]">
+                    <div data-reveal="1" className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:gap-16">
+                        <div>
+                            <div className="text-[12.5px] lg:text-[13px] font-extrabold">Бидний эрхэм зорилго</div>
+                            <p className="mt-3 lg:mt-[18px] m-0 text-lg lg:text-2xl leading-[1.55] font-bold tracking-tight [text-wrap:pretty]">
+                                Хэрэглэгчдэд найдвартай мэдээлэл, зөв сонголт, хариуцлагатай үйлчилгээг хүргэж, автомашин
+                                худалдан авах үйл явцыг илүү хялбар, ойлгомжтой болгоно.
+                            </p>
+                        </div>
+                        <div>
+                            <div className="text-[12.5px] lg:text-[13px] font-extrabold">Бидний алсын хараа</div>
+                            <p className="mt-3 lg:mt-[18px] m-0 text-lg lg:text-2xl leading-[1.55] font-bold tracking-tight [text-wrap:pretty]">
+                                Монголын хуучин автомашины худалдааны салбарт итгэлцэл, ил тод байдал, чанартай үйлчилгээний
+                                шинэ стандартыг бий болгоно.
+                            </p>
+                        </div>
                     </div>
                 </section>
 
                 {/* 서비스 */}
-                <section className="px-4 pt-12">
-                    <div data-reveal="1" className="text-[12.5px] font-extrabold">Бидний үйлчилгээ</div>
-                    <h2
-                        data-reveal="1"
-                        style={{ transitionDelay: '0.06s' }}
-                        className="mt-3 mb-1 text-[26px] leading-[1.3] font-extrabold tracking-tight [text-wrap:balance]"
-                    >
-                        Сонголтоос захиалга хүртэл нэг дор
-                    </h2>
-                    <div className="mt-[18px] flex flex-col">
-                        {SERVICES.map((label, i) => (
-                            <div key={label} data-reveal="1" className="flex items-baseline gap-3.5 py-[18px] px-0.5 border-t border-line">
-                                <span className="text-xs font-extrabold text-primary flex-none w-5">0{i + 1}</span>
-                                <span className="text-base font-bold tracking-tight leading-[1.45] [text-wrap:pretty]">{label}</span>
-                            </div>
-                        ))}
+                <section className="max-w-[1180px] mx-auto px-4 lg:px-6 pt-12 lg:pt-[100px]">
+                    <div data-reveal="1" className="lg:grid lg:grid-cols-[380px_1fr] lg:gap-14 lg:items-start">
+                        <div>
+                            <div className="text-[12.5px] lg:text-[13px] font-extrabold">Бидний үйлчилгээ</div>
+                            <h2 className="mt-3 lg:mt-3.5 mb-1 lg:mb-0 text-[26px] lg:text-[40px] leading-[1.3] lg:leading-[1.25] font-extrabold tracking-tight lg:tracking-[-0.035em] [text-wrap:balance]">
+                                Сонголтоос захиалга хүртэл нэг дор
+                            </h2>
+                            <p className="hidden lg:block mt-[22px] m-0 text-[15px] leading-[1.8] text-muted [text-wrap:pretty]">
+                                Таны цаг хугацаа, итгэл, сэтгэл ханамж бол бидний хамгийн үнэт зүйл.
+                            </p>
+                        </div>
+                        <div className="mt-[18px] lg:mt-0 flex flex-col">
+                            {SERVICES.map((label, i) => (
+                                <div
+                                    key={label}
+                                    className="flex items-baseline gap-3.5 lg:gap-[22px] py-[18px] lg:py-[26px] px-0.5 lg:px-1 border-t border-line"
+                                >
+                                    <span className="text-xs lg:text-[13px] font-extrabold text-primary flex-none w-5 lg:w-[26px]">0{i + 1}</span>
+                                    <span className="text-base lg:text-[21px] font-bold tracking-tight lg:tracking-[-0.025em] leading-[1.45] [text-wrap:pretty]">
+                                        {label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
                 {/* 이유 */}
-                <section className="px-4 pt-12">
-                    <div data-reveal="1" className="text-[12.5px] font-extrabold">Яагаад {COMPANY.name} гэж?</div>
+                <section className="max-w-[1180px] mx-auto px-4 lg:px-6 pt-12 lg:pt-[100px]">
+                    <div className="text-[12.5px] lg:text-[13px] font-extrabold">Яагаад {COMPANY.name} гэж?</div>
                     <h2
                         data-reveal="1"
-                        style={{ transitionDelay: '0.06s' }}
-                        className="mt-3 mb-6 text-[26px] leading-[1.3] font-extrabold tracking-tight"
+                        style={{ transitionDelay: '0.05s' }}
+                        className="mt-3 lg:mt-3.5 mb-6 lg:mb-11 text-[26px] lg:text-[40px] leading-[1.3] lg:leading-[1.25] font-extrabold tracking-tight lg:tracking-[-0.035em]"
                     >
                         Итгэлцлээс эхэлдэг худалдаа
                     </h2>
-                    <div className="flex flex-col gap-7">
+                    <div className="flex flex-col gap-7 lg:grid lg:grid-cols-2 lg:gap-y-7 lg:gap-x-14">
                         {REASONS.map(r => (
                             <div key={r.title} data-reveal="1">
-                                <div className="aspect-[16/10] rounded-2xl bg-surface-2 flex items-end p-3.5 overflow-hidden relative">
-                                    {r.image && (
+                                <div className="aspect-[16/10] rounded-2xl lg:rounded-[18px] bg-surface-2 flex items-end p-3.5 lg:p-[18px] overflow-hidden relative">
+                                    {r.image ? (
                                         <img src={r.image} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                                    )}
-                                    {!r.image && (
-                                        <span className="text-[10px] font-bold tracking-[0.14em] text-muted-3">ЗУРАГ</span>
+                                    ) : (
+                                        <span className="text-[10px] lg:text-[11px] font-bold tracking-[0.14em] text-muted-3">ЗУРАГ</span>
                                     )}
                                 </div>
-                                <div className="mt-4 text-[19px] font-extrabold tracking-tight">{r.title}</div>
-                                <p className="mt-2.5 m-0 text-[14.5px] leading-[1.75] text-muted [text-wrap:pretty]">{r.body}</p>
+                                <div className="mt-4 lg:mt-6 text-[19px] lg:text-2xl font-extrabold tracking-tight lg:tracking-[-0.03em]">
+                                    {r.title}
+                                </div>
+                                <p className="mt-2.5 lg:mt-3 m-0 text-[14.5px] lg:text-[15.5px] leading-[1.75] text-muted [text-wrap:pretty]">
+                                    {r.body}
+                                </p>
                             </div>
                         ))}
                     </div>
                 </section>
 
                 {/* 통계 */}
-                <section className="pt-12 overflow-hidden">
-                    <div className="px-4">
-                        <h2 data-reveal="1" className="m-0 text-[26px] leading-[1.3] font-extrabold tracking-tight">
+                <section className="pt-12 lg:pt-[100px] overflow-hidden">
+                    <div className="max-w-[1180px] mx-auto px-4 lg:px-6">
+                        <h2
+                            data-reveal="1"
+                            className="m-0 text-[26px] lg:text-[40px] leading-[1.3] lg:leading-[1.28] font-extrabold tracking-tight lg:tracking-[-0.035em] max-w-[18ch]"
+                        >
                             Бид тоогоор ч ил тод
                         </h2>
-                        <div className="mt-2.5 text-[12.5px] font-semibold text-muted-3">2026 оны 8 сарын байдлаар</div>
+                        <div className="mt-2.5 lg:mt-3.5 text-[12.5px] lg:text-[13.5px] font-semibold text-muted-3">
+                            2026 оны 8 сарын байдлаар
+                        </div>
                     </div>
-                    <div className="mt-[22px] flex gap-3 px-4 overflow-x-auto no-scrollbar">
+                    <div className="mt-[22px] lg:mt-11 flex gap-3 lg:gap-5 px-4 lg:px-6 overflow-x-auto no-scrollbar max-w-[1180px] mx-auto">
                         {STATS.map((s, i) => (
                             <div
                                 key={s.label}
                                 data-reveal="1"
-                                className="flex-none w-[210px] h-[210px] rounded-[20px] p-[22px] flex flex-col"
+                                className="flex-none w-[210px] h-[210px] lg:w-[270px] lg:h-[270px] rounded-[20px] p-[22px] lg:p-7 flex flex-col"
                                 style={{ background: s.tint, transitionDelay: `${i * 0.08}s` }}
                             >
-                                <div className="text-[13px] font-extrabold">{s.label}</div>
-                                <div className="mt-auto text-[34px] font-extrabold tracking-tight">{s.value}</div>
+                                <div className="text-[13px] lg:text-sm font-extrabold">{s.label}</div>
+                                <div className="mt-auto text-[34px] lg:text-[46px] font-extrabold tracking-tight lg:tracking-[-0.04em]">
+                                    {s.value}
+                                </div>
                             </div>
                         ))}
                     </div>

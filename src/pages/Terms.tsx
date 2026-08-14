@@ -7,11 +7,11 @@ export default function Terms() {
     return (
         <div className="min-h-screen bg-app text-ink flex flex-col">
             <Header title="Үйлчилгээний нөхцөл" hideLogo showBack />
-            <main className="flex-1 px-4 py-6">
-                <h1 className="text-2xl font-extrabold tracking-tight mb-1">Үйлчилгээний нөхцөл</h1>
-                <p className="text-[12.5px] text-muted mb-5">{COMPANY.name} ({COMPANY.tagline})</p>
+            <main className="flex-1 w-full max-w-[880px] mx-auto px-4 lg:px-6 py-6 lg:py-12">
+                <h1 className="text-2xl lg:text-[30px] font-extrabold tracking-tight mb-1">Үйлчилгээний нөхцөл</h1>
+                <p className="text-[12.5px] lg:text-[13px] text-muted mb-5 lg:mb-7">{COMPANY.name} ({COMPANY.tagline})</p>
 
-                <div className="bg-surface border border-line rounded-2xl p-5 space-y-6 text-[13.5px] leading-[1.75] text-ink-2">
+                <div className="bg-surface border border-line rounded-2xl p-5 lg:px-11 lg:py-10 space-y-6 lg:space-y-8 text-[13.5px] lg:text-[14.5px] leading-[1.75] lg:leading-[1.8] text-ink-2">
                     <section>
                         <h2 className="text-base font-extrabold text-ink mb-2">1. Нийтлэг үндэслэл</h2>
                         <p>

@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ChevronDown, X } from 'lucide-react';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
-import { CarListCard } from '../components/CarCard';
+import { CarDesktopCard, CarListCard } from '../components/CarCard';
 import { fuelLabel } from '../constants/company';
 import { getProducts, getSavedIds } from '../utils/storage';
 import type { Product } from '../utils/storage';
@@ -65,10 +66,7 @@ export default function Search() {
     const [sort, setSort] = useState<SortKey>('recommended');
 
     useEffect(() => {
-        const load = async () => {
-            const prods = await getProducts();
-            setProducts(prods);
-        };
+        const load = async () => setProducts(await getProducts());
         const syncSaved = () => setSavedIds(getSavedIds());
         load();
         syncSaved();
@@ -76,10 +74,11 @@ export default function Search() {
         return () => window.removeEventListener('storageSaved', syncSaved);
     }, []);
 
+    // 바텀시트가 열렸을 때만 스크롤을 잠근다 (데스크탑 사이드바는 해당 없음)
     useEffect(() => {
-        document.body.style.overflow = filtersOpen || sortOpen ? 'hidden' : '';
+        document.body.style.overflow = filtersOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
-    }, [filtersOpen, sortOpen]);
+    }, [filtersOpen]);
 
     const toggleFilter = (key: keyof Filters, value: string) => {
         setFilters(f => ({
@@ -89,6 +88,7 @@ export default function Search() {
     };
 
     const resetFilters = () => setFilters(EMPTY_FILTERS);
+    const refreshSaved = () => setSavedIds(getSavedIds());
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -125,17 +125,51 @@ export default function Search() {
         return result;
     }, [products, query, filters, sort]);
 
+    // 선택된 필터를 (그룹, 값) 쌍으로 펼쳐 데스크탑 상단 칩으로 보여준다
+    const activeChips = FILTER_GROUPS.flatMap(g =>
+        filters[g.key].map(value => ({ key: `${g.key}:${value}`, group: g.key, value }))
+    );
+
     const chips = FILTER_GROUPS.map(g => ({
         key: g.key,
         label: g.title === 'Гүйлт' ? 'Явсан гүйлт' : g.title === 'Түлш' ? 'Шатахуун' : g.title,
         on: filters[g.key].length > 0,
     }));
 
+    const sortDropdown = (
+        <div className="relative">
+            <button
+                onClick={() => setSortOpen(o => !o)}
+                className="flex items-center gap-6 h-11 px-4 border border-line rounded-xl bg-surface text-[13.5px] font-bold text-ink whitespace-nowrap"
+            >
+                {SORT_LABELS[sort]}
+                <ChevronDown size={11} className="text-muted-2" />
+            </button>
+            {sortOpen && (
+                <>
+                    <div className="fixed inset-0 z-20" onClick={() => setSortOpen(false)} />
+                    <div className="absolute top-12 right-0 z-30 w-[190px] bg-surface border border-line rounded-xl shadow-2xl p-1.5 flex flex-col">
+                        {SORT_OPTIONS.map(o => (
+                            <button
+                                key={o.key}
+                                onClick={() => { setSort(o.key); setSortOpen(false); }}
+                                className={`h-10 px-3 rounded-lg text-left text-[13.5px] hover:bg-surface-2 ${sort === o.key ? 'font-extrabold text-primary' : 'font-semibold text-ink-2'}`}
+                            >
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    );
+
     return (
         <div className="min-h-screen bg-app text-ink">
             <Header title="Автомашин" hideLogo showBack />
-            <main className="pb-24">
-                {/* 필터 칩 + 정렬 (스티키) */}
+
+            {/* ===== 모바일 ===== */}
+            <main className="lg:hidden pb-24">
                 <div className="sticky top-[61px] z-20 bg-app pt-3 pb-2.5">
                     <div className="flex gap-2 overflow-x-auto px-4 no-scrollbar">
                         {chips.map(c => (
@@ -155,17 +189,10 @@ export default function Search() {
                         <div className="text-[13.5px] font-bold flex-none">
                             {filtered.length} машин{query ? ` · "${query}"` : ''}
                         </div>
-                        <button
-                            onClick={() => setSortOpen(true)}
-                            className="flex items-center gap-2.5 h-[42px] px-3.5 border border-line rounded-xl bg-surface text-[13px] font-bold text-ink whitespace-nowrap"
-                        >
-                            {SORT_LABELS[sort]}
-                            <ChevronDown size={11} className="text-muted-2" />
-                        </button>
+                        {sortDropdown}
                     </div>
                 </div>
 
-                {/* 결과 없음 */}
                 {filtered.length === 0 && (
                     <div className="mx-4 my-3 bg-surface border border-line rounded-2xl px-5 py-12 text-center">
                         <div className="text-[15px] font-extrabold">Тохирох зар олдсонгүй</div>
@@ -179,48 +206,109 @@ export default function Search() {
                     </div>
                 )}
 
-                {/* 매물 리스트 */}
                 <div className="flex flex-col gap-3 px-4 pt-3">
                     {filtered.map(car => (
-                        <CarListCard
-                            key={car.id}
-                            product={car}
-                            saved={savedIds.includes(car.id)}
-                            onSavedChange={() => setSavedIds(getSavedIds())}
-                        />
+                        <CarListCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
                     ))}
                 </div>
             </main>
 
-            {/* 정렬 바텀시트 */}
-            {sortOpen && (
-                <div className="fixed inset-0 z-[55] bg-black/70 flex items-end justify-center" onClick={() => setSortOpen(false)}>
-                    <div className="w-[430px] max-w-full bg-surface rounded-t-[20px] animate-sheet-up" onClick={e => e.stopPropagation()}>
-                        <div className="px-5 pt-[18px] pb-3 flex items-center justify-between border-b border-surface-2">
-                            <div className="text-[17px] font-extrabold tracking-tight">Эрэмбэлэх</div>
-                            <button onClick={() => setSortOpen(false)} aria-label="Хаах" className="w-9 h-9 border-0 rounded-[10px] bg-line text-muted flex items-center justify-center">
-                                <X size={15} />
-                            </button>
+            {/* ===== 데스크탑 (사이드바 + 3열) ===== */}
+            <main className="hidden lg:grid max-w-[1280px] mx-auto px-6 pt-6 pb-20 grid-cols-[280px_1fr] gap-7 items-start">
+                <aside className="sticky top-[92px] bg-surface border border-line rounded-2xl px-[18px] pt-[18px] pb-[22px]">
+                    <div className="flex items-center justify-between pb-4 border-b border-surface-2">
+                        <div className="flex items-center gap-2.5">
+                            <span className="w-[30px] h-[30px] rounded-full bg-ink-block text-white flex items-center justify-center text-[13px]">▽</span>
+                            <span className="text-[15.5px] font-extrabold tracking-tight">Шүүлтүүр</span>
                         </div>
-                        <div className="px-5 pt-1 pb-[26px] flex flex-col">
-                            {SORT_OPTIONS.map(o => (
+                        <button
+                            onClick={resetFilters}
+                            className="border-0 bg-transparent p-0 text-[12.5px] font-semibold text-muted-2 hover:text-primary transition-colors"
+                        >
+                            Цэвэрлэх
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col gap-4 pt-[18px]">
+                        {FILTER_GROUPS.map(g => (
+                            <div key={g.key} className="flex flex-col gap-[7px]">
+                                <span className="text-xs font-bold text-ink-3">{g.title}</span>
+                                <div className="flex flex-col gap-0.5">
+                                    {g.values.map(v => {
+                                        const active = filters[g.key].includes(v);
+                                        return (
+                                            <button
+                                                key={v}
+                                                onClick={() => toggleFilter(g.key, v)}
+                                                className="flex items-center gap-2.5 py-[7px] border-0 bg-transparent text-left"
+                                            >
+                                                <span className={`flex-none w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center text-[11px] font-bold ${active ? 'bg-primary border-primary text-white' : 'border-line-2 text-transparent'}`}>
+                                                    ✓
+                                                </span>
+                                                <span className={`text-[13px] ${active ? 'font-bold text-ink' : 'font-semibold text-ink-3'}`}>
+                                                    {v}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </aside>
+
+                <section>
+                    {activeChips.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-2 mb-4">
+                            {activeChips.map(c => (
                                 <button
-                                    key={o.key}
-                                    onClick={() => { setSort(o.key); setSortOpen(false); }}
-                                    className={`w-full min-h-[50px] flex items-center justify-between px-1 border-0 border-b border-surface-2 bg-transparent text-[14.5px] ${sort === o.key ? 'font-extrabold text-primary' : 'font-semibold text-ink-2'}`}
+                                    key={c.key}
+                                    onClick={() => toggleFilter(c.group, c.value)}
+                                    className="h-8 pl-3 pr-2.5 inline-flex items-center gap-[7px] rounded-lg border border-primary bg-tint text-primary text-[12.5px] font-bold whitespace-nowrap"
                                 >
-                                    {o.label}
-                                    <span>{sort === o.key ? '✓' : ''}</span>
+                                    {c.value} <X size={12} />
                                 </button>
                             ))}
+                            <button
+                                onClick={resetFilters}
+                                className="border-0 bg-transparent text-muted text-[12.5px] font-bold"
+                            >
+                                Бүгдийг цэвэрлэх
+                            </button>
                         </div>
-                    </div>
-                </div>
-            )}
+                    )}
 
-            {/* 필터 바텀시트 */}
+                    <div className="flex items-center justify-between mb-3.5">
+                        <div className="text-sm font-bold">
+                            {filtered.length} машин{query ? ` · "${query}"` : ''}
+                        </div>
+                        {sortDropdown}
+                    </div>
+
+                    {filtered.length === 0 ? (
+                        <div className="bg-surface border border-line rounded-2xl px-6 py-14 text-center">
+                            <div className="text-[15px] font-extrabold">Тохирох зар олдсонгүй</div>
+                            <div className="mt-1.5 text-[13.5px] text-muted">Шүүлтүүрээ багасгаад дахин оролдоно уу.</div>
+                            <button
+                                onClick={resetFilters}
+                                className="mt-[18px] h-[42px] px-5 border-0 rounded-[10px] bg-primary text-white text-[13.5px] font-bold"
+                            >
+                                Шүүлтүүр цэвэрлэх
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-[18px]">
+                            {filtered.map(car => (
+                                <CarDesktopCard key={car.id} product={car} saved={savedIds.includes(car.id)} onSavedChange={refreshSaved} />
+                            ))}
+                        </div>
+                    )}
+                </section>
+            </main>
+
+            {/* 모바일 필터 바텀시트 */}
             {filtersOpen && (
-                <div className="fixed inset-0 z-50 bg-black/70 flex items-end justify-center" onClick={() => setFiltersOpen(false)}>
+                <div className="lg:hidden fixed inset-0 z-50 bg-black/70 flex items-end justify-center" onClick={() => setFiltersOpen(false)}>
                     <div className="w-[430px] max-w-full bg-surface rounded-t-[20px] max-h-[80vh] overflow-y-auto animate-sheet-up" onClick={e => e.stopPropagation()}>
                         <div className="sticky top-0 bg-surface px-5 pt-[18px] pb-3 flex items-center justify-between border-b border-surface-2">
                             <div className="text-[17px] font-extrabold tracking-tight">Шүүлтүүр</div>
@@ -269,6 +357,7 @@ export default function Search() {
                 </div>
             )}
 
+            <Footer />
             <BottomNav />
         </div>
     );

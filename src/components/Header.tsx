@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Menu, Moon, Sun } from 'lucide-react';
 import Logo from './Logo';
 import SideMenu from './SideMenu';
+import DesktopHeader from './DesktopHeader';
+import Ticker from './Ticker';
 import { useTheme } from '../theme';
 import { getUser } from '../utils/storage';
 
@@ -33,7 +35,12 @@ export default function Header({ showBack = false, title = '', hideLogo = false 
 
     return (
         <>
-            <header className="sticky top-0 z-30 bg-surface border-b border-line px-4 py-3 flex items-center gap-3">
+            {/* PC 디자인 헤더 + 티커 (lg 이상) */}
+            <DesktopHeader />
+            <Ticker />
+
+            {/* 모바일 디자인 헤더 (lg 미만) */}
+            <header className="lg:hidden sticky top-0 z-30 bg-surface border-b border-line px-4 py-3 flex items-center gap-3">
                 {showBack && (
                     <button
                         onClick={() => navigate(-1)}

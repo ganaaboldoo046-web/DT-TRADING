@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
 import { clearUser, getUser, setUser as persistUser } from '../utils/storage';
 import type { AppUser } from '../utils/storage';
@@ -83,7 +84,7 @@ export default function Profile() {
     return (
         <div className="min-h-screen bg-app text-ink">
             <Header title="Профайл" hideLogo />
-            <main className="px-4 pt-4 pb-24">
+            <main className="max-w-[720px] mx-auto px-4 lg:px-6 pt-4 lg:pt-10 pb-24 lg:pb-20">
                 {user ? (
                     <div className="bg-surface border border-line rounded-2xl p-5 flex items-center gap-3.5">
                         <div className="w-[52px] h-[52px] rounded-full bg-tint text-primary flex items-center justify-center text-[19px] font-extrabold overflow-hidden">
@@ -166,6 +167,7 @@ export default function Profile() {
                     </div>
                 )}
             </main>
+            <Footer />
             <BottomNav />
         </div>
     );

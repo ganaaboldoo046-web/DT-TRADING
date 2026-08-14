@@ -64,11 +64,11 @@ export default function BookingSheet({ product, open, onClose }: BookingSheetPro
 
     return (
         <div
-            className="fixed inset-0 z-[60] bg-black/70 flex items-end justify-center"
+            className="fixed inset-0 z-[60] bg-black/70 flex items-end justify-center lg:items-center lg:p-6"
             onClick={onClose}
         >
             <div
-                className="w-[430px] max-w-full max-h-[88vh] overflow-y-auto bg-surface rounded-t-[20px] animate-sheet-up"
+                className="w-[430px] max-w-full max-h-[88vh] overflow-y-auto bg-surface rounded-t-[20px] animate-sheet-up lg:max-w-[420px] lg:rounded-[18px] lg:animate-none lg:shadow-2xl lg:max-h-[86vh]"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="px-5 pt-[18px] flex items-start justify-between gap-3.5">

@@ -111,6 +111,57 @@ export function CarListCard({ product, saved, onSavedChange }: CarCardProps) {
     );
 }
 
+/**
+ * PC 디자인용 카드 (4:3 이미지, 점선 구분선 아래 "Монголд очих үнэ").
+ * 홈 4열 그리드와 검색 3열 그리드에서 사용.
+ */
+export function CarDesktopCard({ product, saved, onSavedChange }: CarCardProps) {
+    return (
+        <Link
+            to={`/product/${product.id}`}
+            className="block bg-surface border border-line rounded-2xl overflow-hidden hover:border-line-2 transition-colors"
+        >
+            <div className="relative aspect-[4/3] bg-surface-2">
+                {product.images?.[0] ? (
+                    <Image src={product.images[0]} alt={product.name} className="w-full h-full object-cover" size="medium" />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-[11px] font-bold tracking-[0.1em] text-muted-3">
+                        ЗУРАГ
+                    </div>
+                )}
+                <button
+                    onClick={e => {
+                        e.preventDefault();
+                        toggleSaved(product.id);
+                        onSavedChange?.();
+                    }}
+                    aria-label="Хадгалах"
+                    className="absolute top-2.5 right-2.5 w-8 h-8 border-0 rounded-full bg-black/55 flex items-center justify-center text-muted"
+                >
+                    <Heart size={15} fill={saved ? '#FF1A1A' : 'none'} className={saved ? 'text-primary' : ''} />
+                </button>
+                {product.status === 'sold' && (
+                    <div className="absolute inset-0 bg-black/55 flex items-center justify-center">
+                        <span className="text-white text-xs font-extrabold px-2.5 py-1 bg-black/50 rounded-lg">Зарагдсан</span>
+                    </div>
+                )}
+            </div>
+            <div className="px-4 pt-3.5 pb-4">
+                <div className="text-[14.5px] font-extrabold tracking-tight truncate">{product.name}</div>
+                <div className="mt-1 text-[12.5px] font-medium text-muted truncate">{metaOf(product)}</div>
+                <div className="my-3 border-t border-dashed border-line" />
+                <div className="text-[11.5px] font-semibold text-muted-2">Монголд очих үнэ</div>
+                <div className="mt-1 text-[19px] font-extrabold tracking-tight text-primary">{product.price}</div>
+                {product.priceKRW ? (
+                    <div className="mt-[3px] text-xs font-medium text-muted-2">
+                        Солонгос дахь үнэ ₩{product.priceKRW.toLocaleString()}
+                    </div>
+                ) : null}
+            </div>
+        </Link>
+    );
+}
+
 /** 저장 목록용 가로 카드 */
 export function CarRowCard({ product, saved, onSavedChange }: CarCardProps) {
     return (

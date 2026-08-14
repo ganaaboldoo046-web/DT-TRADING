@@ -23,7 +23,7 @@ export async function onRequest(context: any) {
         `).run();
 
         // Migration: Add missing columns if they don't exist
-        const columns = ['engine', 'transmission', 'drive', 'color', 'interiorColor', 'doors'];
+        const columns = ['engine', 'transmission', 'drive', 'color', 'interiorColor', 'doors', 'options'];
         for (const col of columns) {
             try {
                 await db.prepare(`ALTER TABLE products ADD COLUMN ${col} TEXT`).run();

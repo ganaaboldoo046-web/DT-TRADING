@@ -12,7 +12,7 @@ export default function BottomNav() {
     const location = useLocation();
 
     return (
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-surface border-t border-line px-3 pt-2 pb-[18px] flex box-border">
+        <nav className="lg:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-surface border-t border-line px-3 pt-2 pb-[18px] flex box-border">
             {TABS.map(({ path, label, Icon }) => {
                 const active = location.pathname === path;
                 return (

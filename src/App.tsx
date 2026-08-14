@@ -11,6 +11,7 @@ const Profile = lazy(() => import('./pages/Profile'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const CategoryDetail = lazy(() => import('./pages/CategoryDetail'));
 const About = lazy(() => import('./pages/About'));
+const Categories = lazy(() => import('./pages/Categories'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 
@@ -30,10 +31,10 @@ const LoadingFallback = () => (
     </div>
 );
 
-/* 모바일 프레임 래퍼 - 사용자 페이지 전용 (430px 제한) */
-function MobileLayout() {
+/* 사용자 페이지 래퍼 - 모바일은 430px 프레임, lg 이상에서는 전체 너비 데스크탑 레이아웃 */
+function SiteLayout() {
   return (
-    <div className="w-full max-w-[430px] mx-auto min-h-screen bg-app relative shadow-2xl overflow-x-hidden border-x border-line">
+    <div className="w-full max-w-[430px] lg:max-w-none mx-auto min-h-screen bg-app relative shadow-2xl lg:shadow-none overflow-x-hidden border-x border-line lg:border-x-0">
       <Outlet />
     </div>
   );
@@ -46,13 +47,14 @@ function App() {
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             {/* 사용자 페이지: 430px 모바일 프레임 적용 */}
-            <Route element={<MobileLayout />}>
+            <Route element={<SiteLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
               <Route path="/sell" element={<Sell />} />
               <Route path="/saved" element={<Saved />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
+              <Route path="/categories" element={<Categories />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/category/:id" element={<CategoryDetail />} />
               <Route path="/terms" element={<Terms />} />
