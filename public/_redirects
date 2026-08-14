@@ -1,0 +1,2 @@
+# 확장자 없이 제출한 사이트맵 주소를 실제 파일로 보낸다 (Search Console 실수 방지)
+/sitemap /sitemap.xml 301

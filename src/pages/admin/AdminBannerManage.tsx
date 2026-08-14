@@ -213,6 +213,70 @@ export default function AdminBannerManage() {
                     </div>
                 )}
             </div>
+
+            <TickerEditor />
+        </div>
+    );
+}
+
+/** PC 헤더 아래 검정 띠배너(티커) 문구 편집 — 한 줄에 하나씩 */
+function TickerEditor() {
+    const [text, setText] = useState('');
+    const [status, setStatus] = useState<'loading' | 'idle' | 'saving' | 'saved' | 'error'>('loading');
+
+    useEffect(() => {
+        fetch('/api/ticker')
+            .then(res => res.json())
+            .then((data: { items?: string[] }) => {
+                setText((data.items || []).join('\n'));
+                setStatus('idle');
+            })
+            .catch(() => setStatus('error'));
+    }, []);
+
+    const save = async () => {
+        setStatus('saving');
+        try {
+            const items = text.split('\n').map(s => s.trim()).filter(Boolean);
+            const res = await fetch('/api/ticker', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items }),
+            });
+            if (!res.ok) throw new Error('save failed');
+            setStatus('saved');
+            setTimeout(() => setStatus('idle'), 2000);
+        } catch {
+            setStatus('error');
+        }
+    };
+
+    return (
+        <div className="mt-10 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Тикер (хар туузан баннер)</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                PC 화면 상단의 검정 띠에 흐르는 문구입니다. <b>한 줄에 하나씩</b> 입력하세요.
+                비워두면 기본 문구가 표시됩니다.
+            </p>
+            <textarea
+                value={text}
+                onChange={e => setText(e.target.value)}
+                rows={6}
+                placeholder={'Улаанбаатарт хүргэлт\n1 жилийн үнэгүй баталгаа\nГааль, тээвэр багцад'}
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary resize-y font-medium"
+                disabled={status === 'loading'}
+            />
+            <div className="mt-4 flex items-center gap-3">
+                <button
+                    onClick={save}
+                    disabled={status === 'saving' || status === 'loading'}
+                    className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-60"
+                >
+                    {status === 'saving' ? 'Хадгалж байна…' : 'Хадгалах'}
+                </button>
+                {status === 'saved' && <span className="text-sm font-bold text-green-600">✓ Хадгалагдлаа</span>}
+                {status === 'error' && <span className="text-sm font-bold text-red-500">Алдаа гарлаа. Дахин оролдоно уу.</span>}
+            </div>
         </div>
     );
 }

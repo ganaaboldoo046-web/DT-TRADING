@@ -46,7 +46,7 @@ function isPublic(route: string, method: string, url: URL): boolean {
 
     if (method === 'GET') {
         // 공개 읽기
-        if (['products', 'categories', 'banners', 'exchange_rate', 'reviews_list'].includes(route)) return true;
+        if (['products', 'categories', 'banners', 'exchange_rate', 'reviews_list', 'ticker'].includes(route)) return true;
         // 예약 목록: 본인 userId 조회만 공개, 전체 목록(파라미터 없음)은 관리자 전용
         if (route === 'reservations_list') return !!url.searchParams.get('userId');
         return false;
