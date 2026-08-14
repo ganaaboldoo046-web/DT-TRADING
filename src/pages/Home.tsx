@@ -4,8 +4,8 @@ import { Search as SearchIcon, X } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
-import Image from '../components/Image';
 import HeroCarousel from '../components/HeroCarousel';
+import MobileBannerSlider from '../components/MobileBannerSlider';
 import { CarDesktopCard, CarGridCard } from '../components/CarCard';
 import { getBanners, getCategories, getProducts, getSavedIds } from '../utils/storage';
 import type { Banner, Category, Product } from '../utils/storage';
@@ -13,7 +13,7 @@ import type { Banner, Category, Product } from '../utils/storage';
 export default function Home() {
     const navigate = useNavigate();
     const [query, setQuery] = useState('');
-    const [banner, setBanner] = useState<Banner | null>(null);
+    const [banners, setBanners] = useState<Banner[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [savedIds, setSavedIds] = useState<number[]>([]);
@@ -25,7 +25,7 @@ export default function Home() {
                 getCategories(),
                 getProducts(),
             ]);
-            setBanner(banners.find(b => b.active) || null);
+            setBanners(banners.filter(b => b.active));
             setCategories(cats);
             setProducts(prods.filter(p => p.status === 'active' || p.status === 'pending' || p.status === 'discounted'));
         };
@@ -74,24 +74,24 @@ export default function Home() {
                 </div>
 
                 <div className="mt-4 px-4">
-                    <div
-                        className="relative rounded-[18px] overflow-hidden px-[22px] pt-6 pb-[22px]"
-                        style={{ background: 'linear-gradient(130deg, #0D0D0D 0%, #2A0A0A 55%, #B70000 100%)' }}
-                    >
-                        {banner?.image && (
-                            <div className="absolute inset-0 opacity-40">
-                                <Image src={banner.image} alt="" className="w-full h-full object-cover" size="medium" priority />
-                            </div>
-                        )}
-                        <div className="relative">
-                            <div className="mt-2.5 text-[22px] font-extrabold leading-[1.3] text-white tracking-tight">
-                                {banner?.title || <>Солонгосоос шууд,<br />шалгагдсан автомашин</>}
-                            </div>
-                            <div className="mt-2 text-[12.5px] text-white/[.72] leading-[1.55]">
-                                {banner?.subtitle || 'Гааль, тээвэр, бүртгэл — бүгд багцад.'}
+                    {banners.length > 0 ? (
+                        <MobileBannerSlider banners={banners} />
+                    ) : (
+                        /* 등록된 배너가 없을 때의 기본 히어로 */
+                        <div
+                            className="relative rounded-[18px] overflow-hidden px-[22px] pt-6 pb-[22px]"
+                            style={{ background: 'linear-gradient(130deg, #0D0D0D 0%, #2A0A0A 55%, #B70000 100%)' }}
+                        >
+                            <div className="relative">
+                                <div className="mt-2.5 text-[22px] font-extrabold leading-[1.3] text-white tracking-tight">
+                                    Солонгосоос шууд,<br />шалгагдсан автомашин
+                                </div>
+                                <div className="mt-2 text-[12.5px] text-white/[.72] leading-[1.55]">
+                                    Гааль, тээвэр, бүртгэл — бүгд багцад.
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {categories.length > 0 && (
@@ -135,7 +135,7 @@ export default function Home() {
 
             {/* ===== 데스크탑 (1280px 디자인) ===== */}
             <main className="hidden lg:block max-w-[1280px] mx-auto px-6 pt-7 pb-20">
-                <HeroCarousel />
+                <HeroCarousel banners={banners} />
 
                 {categories.length > 0 && (
                     <section className="mb-11">
