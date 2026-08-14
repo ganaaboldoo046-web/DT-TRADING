@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Menu, Moon, Sun } from 'lucide-react';
 import Logo from './Logo';
@@ -6,7 +6,6 @@ import SideMenu from './SideMenu';
 import DesktopHeader from './DesktopHeader';
 import Ticker from './Ticker';
 import { useTheme } from '../theme';
-import { getUser } from '../utils/storage';
 
 interface HeaderProps {
     /** 뒤로가기 버튼 표시 (상세 페이지 등) */
@@ -15,25 +14,12 @@ interface HeaderProps {
     title?: string;
     /** 로고 숨김 */
     hideLogo?: boolean;
-    /** 로그인 이니셜 버튼 숨김 (상세 페이지처럼 공간이 좁을 때) */
-    hideUser?: boolean;
 }
 
-export default function Header({ showBack = false, title = '', hideLogo = false, hideUser = false }: HeaderProps) {
+export default function Header({ showBack = false, title = '', hideLogo = false }: HeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [userInitial, setUserInitial] = useState('');
     const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
-
-    useEffect(() => {
-        const syncUser = () => {
-            const user = getUser();
-            setUserInitial(user?.name ? user.name.slice(0, 1).toUpperCase() : '');
-        };
-        syncUser();
-        window.addEventListener('userUpdated', syncUser);
-        return () => window.removeEventListener('userUpdated', syncUser);
-    }, []);
 
     return (
         <>
@@ -54,15 +40,7 @@ export default function Header({ showBack = false, title = '', hideLogo = false,
                 )}
                 {!hideLogo && <Logo />}
                 <div className="flex-1 text-[15.5px] font-extrabold tracking-tight truncate">{title}</div>
-                {!hideUser && userInitial && (
-                    <button
-                        onClick={() => navigate('/profile')}
-                        aria-label="Профайл"
-                        className="w-9 h-9 flex-none border-0 rounded-full bg-tint text-primary text-[13px] font-extrabold active:scale-95 transition-transform"
-                    >
-                        {userInitial}
-                    </button>
-                )}
+                {/* 로그인 이니셜 버튼은 두지 않는다 — 프로필 탭에서 접근 가능 */}
                 <button
                     onClick={toggleTheme}
                     aria-label="Горим солих"
