@@ -1,6 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+// Manrope 자체 호스팅 (키릴 포함) — 구글 폰트 CDN 의존 제거
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/manrope/600.css';
+import '@fontsource/manrope/700.css';
+import '@fontsource/manrope/800.css';
 import './index.css'
 import App from './App.tsx'
 import { ThemeProvider } from './theme.tsx'
