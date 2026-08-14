@@ -8,8 +8,8 @@ export const COMPANY = {
     // 개인정보처리방침/이용약관 및 Google OAuth 동의 화면에 노출되는 공식 연락처
     email: 'sonorsinister@gmail.com',
     // 메뉴 연락처 카드
-    phoneMain: '010 5727 9927',
-    phoneSub: '9900 1979',
+    phoneMain: '010 7755 0118',
+    phoneSub: '010 8460 5703',
     // 주문(Захиалга) 연락 채널
     contactChannels: [
         {

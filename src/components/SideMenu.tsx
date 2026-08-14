@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, X } from 'lucide-react';
 import Logo from './Logo';
 import { COMPANY } from '../constants/company';
-import { getUser } from '../utils/storage';
+import { clearUser, getUser } from '../utils/storage';
 import type { AppUser } from '../utils/storage';
 
 interface SideMenuProps {
@@ -96,8 +96,17 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                     )}
                 </div>
 
-                {/* 메뉴 그룹 */}
-                {MENU_GROUPS.map(group => (
+                {/* 메뉴 그룹 (로그인 시 내 메뉴 추가) */}
+                {[
+                    ...MENU_GROUPS,
+                    ...(user ? [{
+                        title: 'МИНИЙ',
+                        items: [
+                            { label: 'Хадгалсан зар', to: '/saved' },
+                            { label: 'Миний захиалга', to: '/profile' },
+                        ],
+                    }] : []),
+                ].map(group => (
                     <div key={group.title} className="px-4 pt-2 pb-1">
                         <div className="text-[11.5px] font-extrabold tracking-[0.08em] text-muted-2 py-2 px-0.5">
                             {group.title}
@@ -116,6 +125,19 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                         </div>
                     </div>
                 ))}
+
+                {/* 로그아웃 */}
+                {user && (
+                    <div className="px-4 pt-2">
+                        <button
+                            onClick={() => { clearUser(); onClose(); }}
+                            className="w-full min-h-[50px] flex items-center justify-between px-0.5 border-0 border-b border-surface-2 bg-transparent text-[14.5px] font-bold text-danger"
+                        >
+                            <span>Гарах</span>
+                            <ChevronRight size={15} className="text-muted-4" />
+                        </button>
+                    </div>
+                )}
 
                 {/* 연락처 카드 */}
                 <div className="m-4 p-5 bg-black rounded-2xl">

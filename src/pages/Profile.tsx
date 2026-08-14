@@ -54,12 +54,12 @@ export default function Profile() {
     }, [user]);
 
     const menuItems = [
-        ...(user ? [{ label: 'Миний захиалга', action: () => setOrdersOpen(o => !o) }] : []),
+        ...(user ? [{ label: 'Миний захиалга', action: () => setOrdersOpen(o => !o), isOrders: true }] : []),
         { label: 'Хадгалсан зар', action: () => navigate('/saved') },
         { label: 'Бидний тухай', action: () => navigate('/about') },
         { label: 'Үйлчилгээний нөхцөл', action: () => navigate('/terms') },
         ...(user ? [{ label: 'Гарах', action: () => clearUser(), danger: true }] : []),
-    ] as { label: string; action: () => void; danger?: boolean }[];
+    ] as { label: string; action: () => void; danger?: boolean; isOrders?: boolean }[];
 
     return (
         <div className="min-h-screen bg-app text-ink">
@@ -104,8 +104,18 @@ export default function Profile() {
                             onClick={m.action}
                             className={`w-full min-h-[52px] flex items-center justify-between px-[18px] border-0 bg-transparent text-sm font-bold ${i < menuItems.length - 1 ? 'border-b border-surface-2' : ''} ${m.danger ? 'text-danger' : 'text-ink'}`}
                         >
-                            <span>{m.label}</span>
-                            <ChevronRight size={15} className="text-muted-4" />
+                            <span className="flex items-center gap-2">
+                                {m.label}
+                                {m.isOrders && orders.length > 0 && (
+                                    <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-tint text-primary text-[11px] font-extrabold flex items-center justify-center">
+                                        {orders.length}
+                                    </span>
+                                )}
+                            </span>
+                            <ChevronRight
+                                size={15}
+                                className={`text-muted-4 transition-transform ${m.isOrders && ordersOpen ? 'rotate-90' : ''}`}
+                            />
                         </button>
                     ))}
                 </div>
