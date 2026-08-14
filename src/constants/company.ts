@@ -5,9 +5,8 @@ export const COMPANY = {
     logoShort: 'DT',
     copyright: '© 2026 DT Trading. All rights reserved.',
     address: 'Инчон хот, Ённсү дүүрэг, Нынхөдэ-ро 192',
-    // 개인정보처리방침/이용약관 및 Google OAuth 동의 화면에 노출되는 공식 연락처.
-    // 실제 사용하는 주소로 채워야 Google 심사에서 연락처 검증을 통과한다. 비우면 화면에 표시되지 않는다.
-    email: '',
+    // 개인정보처리방침/이용약관 및 Google OAuth 동의 화면에 노출되는 공식 연락처
+    email: 'sonorsinister@gmail.com',
     // 메뉴 연락처 카드
     phoneMain: '010 5727 9927',
     phoneSub: '9900 1979',
