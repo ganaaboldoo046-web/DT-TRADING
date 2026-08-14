@@ -10,6 +10,16 @@ interface BookingSheetProps {
     onClose: () => void;
 }
 
+// Messenger는 모바일에선 m.me(앱 딥링크), PC에선 페이스북 메시지 스레드로 연결한다.
+// m.me가 PC 브라우저에서 빈 메신저 홈으로 떨어지는 경우가 있어서다.
+function channelHref(c: (typeof COMPANY.contactChannels)[number]): string {
+    if ('hrefDesktop' in c && c.hrefDesktop) {
+        const isTouchMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        return isTouchMobile ? c.href : c.hrefDesktop;
+    }
+    return c.href;
+}
+
 /**
  * 주문(Захиалга) 바텀시트 — 디자인 시안의 연락 채널 목록 +
  * 기존 예약 API(/api/reservations_create)와 연동된 요청 폼.
@@ -107,7 +117,7 @@ export default function BookingSheet({ product, open, onClose }: BookingSheetPro
                             {COMPANY.contactChannels.map(c => (
                                 <a
                                     key={c.key}
-                                    href={c.href}
+                                    href={channelHref(c)}
                                     target={c.href.startsWith('tel:') ? undefined : '_blank'}
                                     rel="noopener"
                                     className="flex items-center gap-3.5 px-4 py-[15px] border border-line rounded-[14px] bg-surface-2 text-ink active:scale-[0.98] transition-transform"

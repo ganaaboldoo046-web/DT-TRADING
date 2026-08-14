@@ -100,8 +100,13 @@ export default function Home() {
                             <Link
                                 key={c.id}
                                 to={`/category/${c.id}`}
-                                className="flex-none h-11 px-4 border border-line rounded-[22px] bg-surface text-[13px] font-bold text-ink whitespace-nowrap flex items-center gap-1.5"
+                                className="flex-none h-11 pl-1.5 pr-4 border border-line rounded-[22px] bg-surface text-[13px] font-bold text-ink whitespace-nowrap flex items-center gap-2"
                             >
+                                <span className="w-8 h-8 flex-none rounded-full bg-line overflow-hidden flex items-center justify-center text-[10px] font-extrabold text-muted">
+                                    {c.image
+                                        ? <img src={c.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                        : c.name.slice(0, 2).toUpperCase()}
+                                </span>
                                 {c.name}
                                 {c.count > 0 && <span className="text-muted-2 font-semibold">{c.count}</span>}
                             </Link>
@@ -150,8 +155,10 @@ export default function Home() {
                                     to={`/category/${c.id}`}
                                     className="flex items-center gap-3 h-[62px] px-5 bg-surface border border-line rounded-2xl hover:border-primary transition-colors"
                                 >
-                                    <span className="w-[34px] h-[34px] flex-none rounded-full bg-line text-muted flex items-center justify-center text-xs font-extrabold tracking-tight">
-                                        {c.name.slice(0, 2).toUpperCase()}
+                                    <span className="w-[34px] h-[34px] flex-none rounded-full bg-line text-muted flex items-center justify-center text-xs font-extrabold tracking-tight overflow-hidden">
+                                        {c.image
+                                            ? <img src={c.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                            : c.name.slice(0, 2).toUpperCase()}
                                     </span>
                                     <span className="text-sm font-extrabold tracking-[0.02em]">{c.name}</span>
                                     {c.count > 0 && <span className="text-[13px] font-semibold text-muted-2">{c.count}</span>}

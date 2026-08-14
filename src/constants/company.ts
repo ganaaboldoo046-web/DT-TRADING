@@ -17,7 +17,10 @@ export const COMPANY = {
             icon: '✆',
             title: 'Messenger',
             sub: 'Facebook Messenger-ээр бичих',
+            // 모바일: Messenger 앱으로 바로 연결
             href: 'https://m.me/a.t.g.ld.r.719276',
+            // PC: m.me가 빈 메신저 홈으로 떨어지는 경우가 있어 메시지 스레드로 직접 연결
+            hrefDesktop: 'https://www.facebook.com/messages/t/a.t.g.ld.r.719276',
             bg: 'linear-gradient(135deg, #7B5BFF 0%, #C13BFF 100%)',
         },
         {
