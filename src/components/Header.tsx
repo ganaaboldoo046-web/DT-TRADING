@@ -15,9 +15,11 @@ interface HeaderProps {
     title?: string;
     /** 로고 숨김 */
     hideLogo?: boolean;
+    /** 로그인 이니셜 버튼 숨김 (상세 페이지처럼 공간이 좁을 때) */
+    hideUser?: boolean;
 }
 
-export default function Header({ showBack = false, title = '', hideLogo = false }: HeaderProps) {
+export default function Header({ showBack = false, title = '', hideLogo = false, hideUser = false }: HeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [userInitial, setUserInitial] = useState('');
     const navigate = useNavigate();
@@ -52,7 +54,7 @@ export default function Header({ showBack = false, title = '', hideLogo = false 
                 )}
                 {!hideLogo && <Logo />}
                 <div className="flex-1 text-[15.5px] font-extrabold tracking-tight truncate">{title}</div>
-                {userInitial && (
+                {!hideUser && userInitial && (
                     <button
                         onClick={() => navigate('/profile')}
                         aria-label="Профайл"

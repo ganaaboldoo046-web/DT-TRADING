@@ -164,7 +164,7 @@ export default function ProductDetail() {
 
     return (
         <div className="min-h-screen bg-app text-ink">
-            <Header showBack />
+            <Header showBack hideLogo hideUser />
 
             {/* ===== 모바일 ===== */}
             <main className="lg:hidden pb-[116px]">
