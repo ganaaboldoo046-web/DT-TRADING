@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="mn" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DT TRADING - Автомашин Худалдаа</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
+    rel="stylesheet" />
+  <meta property="og:title" content="DT TRADING - Автомашин Худалдаа" />
+  <meta property="og:description" content="Солонгосоос шууд, шалгагдсан автомашин. Гааль, тээвэр, бүртгэл — бүгд багцад." />
+  <meta property="og:image" content="/logo.png" />
+  <meta property="og:type" content="website" />
+  <style>
+    /* FOUT 방지: 폰트 로딩 완료 전까지 화면 숨김 처리 */
+    .fonts-loading { opacity: 0; }
+    .fonts-loaded { opacity: 1; transition: opacity 0.15s ease-in; }
+  </style>
+  <script>
+    /* 테마 초기화: 저장된 값 없으면 다크가 기본 (FOUC 방지 위해 head에서 실행) */
+    (function () {
+      try {
+        var t = localStorage.getItem('dt_theme');
+        if (t === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root" class="fonts-loading"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <script>
+    /* 폰트가 모두 로드되면 화면 표시 (최대 2초 대기 후 강제 표시) */
+    var root = document.getElementById('root');
+    document.fonts.ready.then(function() {
+      root.classList.remove('fonts-loading');
+      root.classList.add('fonts-loaded');
+    });
+    setTimeout(function() {
+      root.classList.remove('fonts-loading');
+      root.classList.add('fonts-loaded');
+    }, 2000);
+  </script>
+</body>
+
+</html>

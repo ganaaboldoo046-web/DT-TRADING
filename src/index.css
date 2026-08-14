@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   DT TRADING 디자인 토큰
+   다크가 기본 테마 (html.dark), 라이트는 토글
+   ============================================ */
+:root {
+  --bg: #F4F5F7;
+  --surface: #FFFFFF;
+  --surface-2: #F7F8FA;
+  --surface-3: #E9ECF1;
+  --line: #E6E8EC;
+  --line-2: #C9D3E4;
+  --ink-block: #101622;
+  --text: #0F172A;
+  --text-2: #374151;
+  --text-3: #4B5563;
+  --muted: #6B7280;
+  --muted-2: #9AA1AC;
+  --muted-3: #B6BCC6;
+  --muted-4: #C3C9D2;
+  --tint: #FFF3F2;
+  --danger: #E5484D;
+  --accent-soft: #FFACA6;
+  --hero: linear-gradient(120deg, #0D0D0D 0%, #2A0A0A 55%, #B70000 100%);
+}
+
+html.dark {
+  --bg: #0D0D0D;
+  --surface: #1A1A1A;
+  --surface-2: #242424;
+  --surface-3: #161616;
+  --line: #2C2C2C;
+  --line-2: #4A4A4A;
+  --ink-block: #000000;
+  --text: #FFFFFF;
+  --text-2: #C7C7C7;
+  --text-3: #B0B0B0;
+  --muted: #9A9A9A;
+  --muted-2: #8A8A8A;
+  --muted-3: #6E6E6E;
+  --muted-4: #5A5A5A;
+  --tint: #2A1112;
+  --danger: #FF5A5A;
+  --accent-soft: #FF6B6B;
+}
+
+@layer base {
+  body {
+    /* PC 데스크탑 환경 외부 여백 배경색 */
+    @apply font-sans antialiased min-h-screen;
+    background: var(--bg);
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    overflow-x: hidden;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 스크롤 리빌 애니메이션 (About 페이지) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 0.84, 0.24, 1), transform 0.8s cubic-bezier(0.16, 0.84, 0.24, 1);
+}
+[data-reveal][data-shown="1"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@layer utilities {
+  /* 바텀시트 등장 */
+  .animate-sheet-up {
+    animation: sheet-up 0.22s ease-out;
+  }
+  @keyframes sheet-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /* 가로 마퀴 (About 이미지 스트립) */
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* 세로 마퀴 (로그인 배경) */
+  .animate-marquee-vertical {
+    animation: marquee-vertical 20s linear infinite;
+  }
+  .animate-marquee-vertical-slow {
+    animation: marquee-vertical 30s linear infinite;
+  }
+  .animate-marquee-vertical-reverse {
+    animation: marquee-vertical-reverse 25s linear infinite;
+  }
+  @keyframes marquee-vertical {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+  }
+  @keyframes marquee-vertical-reverse {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+}
