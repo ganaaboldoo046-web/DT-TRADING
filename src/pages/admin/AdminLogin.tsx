@@ -6,19 +6,28 @@ export default function AdminLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
-        // Simple mock authentication
-        // In a real app, this would verify with a backend
-        if (email === 'admin@dt-trading.mn' && password === 'admin123') {
-            localStorage.setItem('isAdmin', 'true');
-            // Navigate to admin dashboard
-            navigate('/admin');
-        } else {
-            setError('Имэйл эсвэл нууц үг буруу байна.'); // Invalid email or password
+        setLoading(true);
+        try {
+            const res = await fetch('/api/admin_login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok) {
+                navigate('/admin');
+            } else {
+                setError((data as { error?: string }).error || 'Нэвтрэхэд алдаа гарлаа.');
+            }
+        } catch {
+            setError('Сүлжээний алдаа. Дахин оролдоно уу.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -46,7 +55,7 @@ export default function AdminLogin() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
-                            placeholder="admin@dt-trading.mn"
+                            placeholder="И-мэйл хаяг"
                             required
                         />
                     </div>
@@ -65,9 +74,10 @@ export default function AdminLogin() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 active:scale-95 transition-all"
+                        disabled={loading}
+                        className="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 active:scale-95 transition-all disabled:opacity-60"
                     >
-                        Нэвтрэх
+                        {loading ? 'Шалгаж байна…' : 'Нэвтрэх'}
                     </button>
                 </form>
             </div>

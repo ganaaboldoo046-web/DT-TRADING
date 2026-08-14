@@ -6,14 +6,19 @@ export default function AdminLayout() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
     useEffect(() => {
-        const isAdmin = localStorage.getItem('isAdmin');
-        if (!isAdmin) {
-            navigate('/admin/login');
-        }
+        // 서버 세션 확인 — 쿠키는 HttpOnly라 fetch로만 검증 가능
+        fetch('/api/admin_me')
+            .then(res => res.json())
+            .then((data: { admin?: boolean }) => {
+                if (!data.admin) navigate('/admin/login');
+            })
+            .catch(() => navigate('/admin/login'));
     }, [navigate]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('isAdmin');
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/admin_me', { method: 'POST' });
+        } catch { /* 로그아웃 실패해도 이동은 한다 */ }
         navigate('/admin/login');
     };
 
