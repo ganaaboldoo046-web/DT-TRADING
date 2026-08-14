@@ -1,25 +1,28 @@
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { COMPANY } from '../constants/company';
 
 export default function Terms() {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white flex flex-col">
-            <Header />
-            <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-                <h1 className="text-3xl font-bold mb-8 text-primary">Үйлчилгээний нөхцөл</h1>
+        <div className="min-h-screen bg-app text-ink flex flex-col">
+            <Header title="Үйлчилгээний нөхцөл" hideLogo showBack />
+            <main className="flex-1 px-4 py-6">
+                <h1 className="text-2xl font-extrabold tracking-tight mb-1">Үйлчилгээний нөхцөл</h1>
+                <p className="text-[12.5px] text-muted mb-5">{COMPANY.name} ({COMPANY.tagline})</p>
 
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm space-y-6 text-sm leading-relaxed">
+                <div className="bg-surface border border-line rounded-2xl p-5 space-y-6 text-[13.5px] leading-[1.75] text-ink-2">
                     <section>
-                        <h2 className="text-xl font-bold mb-3">1. Нийтлэг үндэслэл</h2>
+                        <h2 className="text-base font-extrabold text-ink mb-2">1. Нийтлэг үндэслэл</h2>
                         <p>
-                            Энэхүү үйлчилгээний нөхцөл нь "Temmun Trading" (цаашид "Компани" гэх)-ийн үзүүлж буй автомашин худалдаа, зуучлалын үйлчилгээг хэрэглэгч ашиглахтай холбоотой харилцааг зохицуулна.
+                            Энэхүү үйлчилгээний нөхцөл нь "{COMPANY.name}" (цаашид "Компани" гэх)-ийн үзүүлж буй
+                            автомашин худалдаа, зуучлалын үйлчилгээг хэрэглэгч ашиглахтай холбоотой харилцааг зохицуулна.
                             Хэрэглэгч манай үйлчилгээг ашигласнаар энэхүү нөхцөлийг хүлээн зөвшөөрсөнд тооцогдоно.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-bold mb-3">2. Үйлчилгээний төрөл</h2>
+                        <h2 className="text-base font-extrabold text-ink mb-2">2. Үйлчилгээний төрөл</h2>
                         <ul className="list-disc pl-5 space-y-1">
                             <li>БНСУ-аас автомашин худалдан авах зуучлал</li>
                             <li>Автомашины тээвэрлэлт, гаалийн бүрдүүлэлтийн зөвлөгөө</li>
@@ -28,35 +31,45 @@ export default function Terms() {
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-bold mb-3">3. Захиалга ба Төлбөр</h2>
+                        <h2 className="text-base font-extrabold text-ink mb-2">3. Захиалга ба Төлбөр</h2>
                         <p>
-                            Хэрэглэгч вэбсайтаар дамжуулан автомашин захиалах хүсэлт илгээх боломжтой. Захиалга баталгаажсаны дараа төлбөрийн нөхцөлийг талууд харилцан тохиролцоно.
+                            Хэрэглэгч вэбсайтаар дамжуулан автомашин захиалах хүсэлт илгээх боломжтой.
+                            Захиалга баталгаажсаны дараа төлбөрийн нөхцөлийг талууд харилцан тохиролцоно.
                             Захиалга цуцлах тохиолдолд гарсан зардлыг хэрэглэгч хариуцна.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-bold mb-3">4. Хариуцлага</h2>
+                        <h2 className="text-base font-extrabold text-ink mb-2">4. Хэрэглэгчийн бүртгэл</h2>
                         <p>
-                            Компани нь автомашины бодит байдал, техникийн үзүүлэлтийг үнэн зөв мэдээлэх үүрэгтэй.
-                            Гэвч байгалийн давагдашгүй хүчин зүйл, тээвэрлэлтийн явцад үүссэн хохиролд компани шууд хариуцлага хүлээхгүй.
+                            Хэрэглэгч Google хаягаараа нэвтэрч бүртгэл үүсгэх боломжтой. Бүртгэлийн мэдээллийг хэрхэн
+                            цуглуулж, ашиглах талаар <Link to="/privacy" className="text-primary font-bold">Нууцлалын бодлого</Link>-оос
+                            дэлгэрэнгүй уншина уу. Хэрэглэгч хүссэн үедээ бүртгэлээ устгуулах хүсэлт гаргаж болно.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-bold mb-3">5. Холбоо барих</h2>
+                        <h2 className="text-base font-extrabold text-ink mb-2">5. Хариуцлага</h2>
                         <p>
-                            Үйлчилгээтэй холбоотой санал хүсэлт, гомдлыг доорх хаягаар хүлээн авна.
+                            Компани нь автомашины бодит байдал, техникийн үзүүлэлтийг үнэн зөв мэдээлэх үүрэгтэй.
+                            Гэвч байгалийн давагдашгүй хүчин зүйл, тээвэрлэлтийн явцад үүссэн хохиролд компани
+                            шууд хариуцлага хүлээхгүй.
                         </p>
-                        <div className="mt-2 text-slate-600 dark:text-slate-400 font-medium">
-                            <p>Temmun Trading</p>
-                            <p>Утас: 010 5727 9927</p>
-                            <p>Имэйл: temmuntrading@gmail.com</p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-base font-extrabold text-ink mb-2">6. Холбоо барих</h2>
+                        <p>Үйлчилгээтэй холбоотой санал хүсэлт, гомдлыг доорх хаягаар хүлээн авна.</p>
+                        <div className="mt-2 text-muted font-medium">
+                            <p className="text-ink font-bold">{COMPANY.name}</p>
+                            <p>Утас: {COMPANY.phoneMain} / {COMPANY.phoneSub}</p>
+                            {COMPANY.email && <p>Имэйл: {COMPANY.email}</p>}
+                            <p>Хаяг: {COMPANY.address}</p>
                         </div>
                     </section>
                 </div>
 
-                <div className="mt-6 text-center">
+                <div className="mt-6 text-center pb-24">
                     <Link to="/" className="text-primary font-bold hover:underline">Нүүр хуудас руу буцах</Link>
                 </div>
             </main>

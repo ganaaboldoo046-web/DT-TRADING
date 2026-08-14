@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /profile
 Disallow: /saved
 
-Sitemap: https://www.temmun.mn/sitemap.xml
+Sitemap: https://dt-trading.pages.dev/sitemap.xml
