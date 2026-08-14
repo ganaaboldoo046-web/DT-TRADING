@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
 import { ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BottomNav from '../components/BottomNav';
-import { clearUser, getUser, setUser as persistUser } from '../utils/storage';
+import GoogleAuthCard from '../components/GoogleAuthCard';
+import { isGoogleAuthConfigured } from '../constants/googleAuth';
+import { clearUser, getUser } from '../utils/storage';
 import type { AppUser } from '../utils/storage';
 
 interface Order {
@@ -52,29 +53,8 @@ export default function Profile() {
         fetchOrders();
     }, [user]);
 
-    const login = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            try {
-                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-                });
-                const data = await res.json();
-                persistUser({
-                    email: data.email,
-                    name: data.name,
-                    avatar: data.picture,
-                    googleId: data.sub,
-                });
-            } catch (e) {
-                console.error('Failed to fetch user info:', e);
-                alert('Нэвтрэхэд алдаа гарлаа. Дахин оролдоно уу.');
-            }
-        },
-        onError: () => alert('Нэвтрэхэд алдаа гарлаа. Дахин оролдоно уу.'),
-    });
-
     const menuItems = [
-        { label: 'Миний захиалга', action: () => user ? setOrdersOpen(o => !o) : login() },
+        ...(user ? [{ label: 'Миний захиалга', action: () => setOrdersOpen(o => !o) }] : []),
         { label: 'Хадгалсан зар', action: () => navigate('/saved') },
         { label: 'Бидний тухай', action: () => navigate('/about') },
         { label: 'Үйлчилгээний нөхцөл', action: () => navigate('/terms') },
@@ -97,27 +77,22 @@ export default function Profile() {
                             <div className="mt-[3px] text-[12.5px] text-muted truncate">{user.email}</div>
                         </div>
                     </div>
+                ) : isGoogleAuthConfigured ? (
+                    <GoogleAuthCard />
                 ) : (
+                    /* 클라이언트 ID가 없으면 로그인 UI를 아예 띄우지 않는다.
+                       누르면 실패할 버튼을 보여주는 것보다 낫고, 나머지 기능은 그대로 쓸 수 있다. */
                     <div className="bg-surface border border-line rounded-2xl px-5 py-6">
-                        <div className="text-base font-extrabold tracking-tight">Нэвтэрч захиалгаа хянаарай</div>
-                        <div className="mt-1.5 text-[13px] leading-relaxed text-muted">Хадгалсан зар, захиалгын төлөв нэг дор.</div>
-                        <div className="mt-4 flex gap-[9px]">
-                            <button
-                                onClick={() => login()}
-                                className="flex-1 h-12 border-0 rounded-xl bg-primary text-white text-sm font-bold active:scale-95 transition-transform"
-                            >
-                                Нэвтрэх
-                            </button>
-                            <button
-                                onClick={() => login()}
-                                className="flex-1 h-12 border border-line rounded-xl bg-surface text-ink text-sm font-bold active:scale-95 transition-transform"
-                            >
-                                Бүртгүүлэх
-                            </button>
+                        <div className="text-base font-extrabold tracking-tight">Автомашинаа сонгоод захиалга өгөөрэй</div>
+                        <div className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                            Нэвтрэхгүйгээр ч зар үзэх, хадгалах, захиалга өгөх боломжтой.
                         </div>
-                        <p className="mt-3.5 text-[11.5px] text-muted-2">
-                            Google хаягаараа нэвтэрнэ. Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрч байна.
-                        </p>
+                        <button
+                            onClick={() => navigate('/search')}
+                            className="mt-4 w-full h-12 border-0 rounded-xl bg-primary text-white text-sm font-bold active:scale-95 transition-transform"
+                        >
+                            Машин үзэх
+                        </button>
                     </div>
                 )}
 
