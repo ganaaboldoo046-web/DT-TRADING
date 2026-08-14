@@ -4,15 +4,18 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 export default function AdminLayout() {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    // null = 세션 확인 중. 확인이 끝나기 전엔 관리자 화면을 그리지 않는다 (깜빡임 방지)
+    const [authorized, setAuthorized] = React.useState<boolean | null>(null);
 
     useEffect(() => {
         // 서버 세션 확인 — 쿠키는 HttpOnly라 fetch로만 검증 가능
         fetch('/api/admin_me')
             .then(res => res.json())
             .then((data: { admin?: boolean }) => {
-                if (!data.admin) navigate('/admin/login');
+                if (data.admin) setAuthorized(true);
+                else navigate('/admin/login', { replace: true });
             })
-            .catch(() => navigate('/admin/login'));
+            .catch(() => navigate('/admin/login', { replace: true }));
     }, [navigate]);
 
     const handleLogout = async () => {
@@ -21,6 +24,14 @@ export default function AdminLayout() {
         } catch { /* 로그아웃 실패해도 이동은 한다 */ }
         navigate('/admin/login');
     };
+
+    if (authorized !== true) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-900">
+                <div className="w-10 h-10 border-4 border-slate-300 dark:border-slate-700 border-t-primary rounded-full animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen bg-slate-100 dark:bg-slate-900 font-display">
