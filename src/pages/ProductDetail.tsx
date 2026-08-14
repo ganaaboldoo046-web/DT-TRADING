@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Check, Heart } from 'lucide-react';
+import { Check, Heart, ReceiptText } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BookingSheet from '../components/BookingSheet';
+import PriceBreakdownSheet from '../components/PriceBreakdownSheet';
 import Image from '../components/Image';
 import { COMPANY, fuelLabel } from '../constants/company';
 import { OPTION_CATEGORIES, VEHICLE_OPTIONS } from '../constants/vehicleOptions';
@@ -19,6 +20,7 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const [bookingOpen, setBookingOpen] = useState(false);
+    const [breakdownOpen, setBreakdownOpen] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -204,6 +206,15 @@ export default function ProductDetail() {
                             Солонгост ₩{product.priceKRW.toLocaleString()}
                         </div>
                     ) : null}
+                    {product.priceKRW ? (
+                        <button
+                            onClick={() => setBreakdownOpen(true)}
+                            className="mt-3.5 w-full h-11 border border-line rounded-xl bg-surface-2 text-[13.5px] font-bold text-ink flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+                        >
+                            <ReceiptText size={15} className="text-primary" />
+                            Үнийн задаргаа харах
+                        </button>
+                    ) : null}
                 </div>
 
                 {specs.length > 0 && (
@@ -338,6 +349,15 @@ export default function ProductDetail() {
                                         Солонгост ₩{product.priceKRW.toLocaleString()}
                                     </div>
                                 ) : null}
+                                {product.priceKRW ? (
+                                    <button
+                                        onClick={() => setBreakdownOpen(true)}
+                                        className="mt-4 w-full h-11 border border-line rounded-xl bg-surface-2 text-[13.5px] font-bold text-ink flex items-center justify-center gap-2 hover:border-primary transition-colors"
+                                    >
+                                        <ReceiptText size={15} className="text-primary" />
+                                        Үнийн задаргаа харах
+                                    </button>
+                                ) : null}
                             </div>
                             <div className="flex flex-col gap-[9px] mt-[22px]">
                                 <button
@@ -369,6 +389,7 @@ export default function ProductDetail() {
 
             <Footer />
             <BookingSheet product={product} open={bookingOpen} onClose={() => setBookingOpen(false)} />
+            <PriceBreakdownSheet product={product} open={breakdownOpen} onClose={() => setBreakdownOpen(false)} />
         </div>
     );
 }

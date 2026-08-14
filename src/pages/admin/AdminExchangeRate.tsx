@@ -101,6 +101,8 @@ export default function AdminExchangeRate() {
                 </form>
             </div>
 
+            <PricingSettingsCard />
+
             {/* Example Calculation Card */}
             <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-2xl p-6">
                 <h3 className="font-bold text-blue-800 dark:text-blue-300 mb-2">Жишээ бодолт:</h3>
@@ -114,6 +116,96 @@ export default function AdminExchangeRate() {
                         <span className="font-bold">&rarr; {(25000000 * rate / 1000000).toFixed(1)} сая ₮</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    );
+}
+
+/**
+ * Үнийн задаргаа(가격 상세) 공통 설정 — 서비스 수수료·운송비·관세·부가세.
+ * 상세 페이지의 가격 내역이 이 값들로 자동 계산된다.
+ * 특별소비세는 공식 세율표(배기량×연식)로 자동 계산되므로 여기서 설정하지 않는다.
+ */
+function PricingSettingsCard() {
+    const [form, setForm] = useState({ serviceFee: '', transport: '', customsPct: '', vatPct: '' });
+    const [status, setStatus] = useState<'loading' | 'idle' | 'saving' | 'saved' | 'error'>('loading');
+
+    useEffect(() => {
+        fetch('/api/pricing')
+            .then(res => res.json())
+            .then((d: { serviceFee: number; transport: number; customsPct: number; vatPct: number }) => {
+                setForm({
+                    serviceFee: String(d.serviceFee),
+                    transport: String(d.transport),
+                    customsPct: String(d.customsPct),
+                    vatPct: String(d.vatPct),
+                });
+                setStatus('idle');
+            })
+            .catch(() => setStatus('error'));
+    }, []);
+
+    const save = async () => {
+        setStatus('saving');
+        try {
+            const res = await fetch('/api/pricing', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    serviceFee: Number(form.serviceFee),
+                    transport: Number(form.transport),
+                    customsPct: Number(form.customsPct),
+                    vatPct: Number(form.vatPct),
+                }),
+            });
+            if (!res.ok) throw new Error('save failed');
+            setStatus('saved');
+            setTimeout(() => setStatus('idle'), 2000);
+        } catch {
+            setStatus('error');
+        }
+    };
+
+    const field = (key: keyof typeof form, label: string, suffix: string, step = '1') => (
+        <label className="block">
+            <span className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">{label}</span>
+            <div className="relative">
+                <input
+                    type="number"
+                    step={step}
+                    value={form[key]}
+                    onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+                    disabled={status === 'loading'}
+                    className="w-full pr-14 pl-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 font-bold"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">{suffix}</span>
+            </div>
+        </label>
+    );
+
+    return (
+        <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <h3 className="font-bold text-slate-900 dark:text-white mb-1">Үнийн задаргааны тохиргоо</h3>
+            <p className="text-xs text-slate-500 mb-5">
+                상세 페이지의 "Үнийн задаргаа"가 이 값으로 자동 계산됩니다.
+                특별소비세는 공식 세율표(배기량·연식·연료)로 자동 적용되어 설정할 필요가 없습니다.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {field('serviceFee', 'Монгол үйлчилгээний шимтгэл', '₮')}
+                {field('transport', 'Тээврийн зардал', '₮')}
+                {field('customsPct', 'Гаалийн татвар', '%', '0.1')}
+                {field('vatPct', 'НӨАТ', '%', '0.1')}
+            </div>
+            <div className="mt-6 flex items-center gap-3">
+                <button
+                    onClick={save}
+                    disabled={status === 'saving' || status === 'loading'}
+                    className="bg-primary text-white font-bold px-8 py-3 rounded-xl disabled:opacity-50"
+                >
+                    {status === 'saving' ? 'Хадгалж байна...' : 'Хадгалах'}
+                </button>
+                {status === 'saved' && <span className="text-sm font-bold text-green-600">✓ Хадгалагдлаа</span>}
+                {status === 'error' && <span className="text-sm font-bold text-red-500">Алдаа гарлаа. Дахин оролдоно уу.</span>}
             </div>
         </div>
     );

@@ -29,6 +29,7 @@ export default function AdminProductCreate() {
         color: '',
         interiorColor: '',
         doors: '',
+        vin: '',
         description: '',
         categoryId: '',
         status: 'active'
@@ -61,6 +62,7 @@ export default function AdminProductCreate() {
                         color: productToEdit.color || '',
                         interiorColor: productToEdit.interiorColor || '',
                         doors: productToEdit.doors || '',
+                        vin: productToEdit.vin || '',
                         description: productToEdit.description || '',
                         categoryId: productToEdit.categoryId.toString(),
                         status: productToEdit.status
@@ -166,6 +168,7 @@ export default function AdminProductCreate() {
                 color: formData.color,
                 interiorColor: formData.interiorColor,
                 doors: formData.doors,
+                vin: formData.vin,
                 options: selectedOptions
             };
 
@@ -292,8 +295,9 @@ export default function AdminProductCreate() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">Дэлгэрэнгүй мэдээлэл</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label className="block">
-                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хөдөлгүүр (Engine)</span>
-                            <input name="engine" value={formData.engine} onChange={handleChange} type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="2.0L Turbo" />
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хөдөлгүүр (Engine, cc 포함)</span>
+                            <input name="engine" value={formData.engine} onChange={handleChange} type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="1,998cc" />
+                            <span className="text-[11px] text-slate-400 mt-1 block">cc 숫자를 넣으면 특별소비세가 자동 계산됩니다 (예: 1,998cc)</span>
                         </label>
                         <label className="block">
                             <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хурдны хайрцаг (Transmission)</span>
@@ -314,6 +318,10 @@ export default function AdminProductCreate() {
                         <label className="block">
                             <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хаалга (Doors)</span>
                             <input name="doors" value={formData.doors} onChange={handleChange} type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="5" />
+                        </label>
+                        <label className="block">
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">VIN (арлын дугаар)</span>
+                            <input name="vin" value={formData.vin} onChange={handleChange} type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary font-mono" placeholder="1C4HJXFN2KW642778" />
                         </label>
                     </div>
                 </div>

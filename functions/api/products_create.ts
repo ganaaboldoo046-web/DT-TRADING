@@ -27,7 +27,7 @@ export async function onRequest(context: any) {
         `).run();
 
         // Migration: Add missing columns if they don't exist
-        const columns = ['engine', 'transmission', 'drive', 'color', 'interiorColor', 'doors', 'options'];
+        const columns = ['engine', 'transmission', 'drive', 'color', 'interiorColor', 'doors', 'options', 'vin'];
         for (const col of columns) {
             try {
                 await db.prepare(`ALTER TABLE products ADD COLUMN ${col} TEXT`).run();
@@ -44,38 +44,40 @@ export async function onRequest(context: any) {
         const {
             id, name, price, priceKRW, year, mileage, fuel,
             description, categoryId, status, images, isFeatured,
-            engine, transmission, drive, color, interiorColor, doors, options
+            engine, transmission, drive, color, interiorColor, doors, options, vin
         } = data;
 
         if (id) {
             // Update existing product
             await db.prepare(`
                 UPDATE products SET
-                    name = ?, price = ?, priceKRW = ?, year = ?, mileage = ?, fuel = ?, 
+                    name = ?, price = ?, priceKRW = ?, year = ?, mileage = ?, fuel = ?,
                     description = ?, categoryId = ?, status = ?, images = ?, isFeatured = ?,
-                    engine = ?, transmission = ?, drive = ?, color = ?, interiorColor = ?, doors = ?, options = ?
+                    engine = ?, transmission = ?, drive = ?, color = ?, interiorColor = ?, doors = ?, options = ?, vin = ?
                 WHERE id = ?
             `).bind(
                 name, price, priceKRW, year, mileage, fuel,
                 description, categoryId, status, JSON.stringify(images), isFeatured ? 1 : 0,
                 engine || null, transmission || null, drive || null, color || null, interiorColor || null, doors || null,
                 options ? JSON.stringify(options) : null,
+                vin || null,
                 id
             ).run();
         } else {
             // Insert new product
             await db.prepare(`
                 INSERT INTO products (
-                    name, price, priceKRW, year, mileage, fuel, 
+                    name, price, priceKRW, year, mileage, fuel,
                     description, categoryId, status, images, isFeatured,
-                    engine, transmission, drive, color, interiorColor, doors, options
+                    engine, transmission, drive, color, interiorColor, doors, options, vin
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 name, price, priceKRW, year, mileage, fuel,
                 description, categoryId, status, JSON.stringify(images), isFeatured ? 1 : 0,
                 engine || null, transmission || null, drive || null, color || null, interiorColor || null, doors || null,
-                options ? JSON.stringify(options) : null
+                options ? JSON.stringify(options) : null,
+                vin || null
             ).run();
         }
 

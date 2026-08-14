@@ -37,6 +37,7 @@ export interface Product {
     color?: string;
     interiorColor?: string;
     doors?: string;
+    vin?: string;
     isFeatured?: boolean;
 }
 
