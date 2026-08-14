@@ -26,5 +26,6 @@ dist-ssr
 # Env & local dev
 .env
 .env.*
+!.env.example
 .wrangler
 

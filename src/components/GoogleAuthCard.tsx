@@ -1,12 +1,13 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { setUser } from '../utils/storage';
+import { isGoogleAuthConfigured } from '../constants/googleAuth';
 
 /**
- * 로그아웃 상태에서 보여주는 Google 로그인 카드.
- * useGoogleLogin은 GoogleOAuthProvider 안에서만 쓸 수 있으므로,
- * 클라이언트 ID가 설정된 경우에만 이 컴포넌트를 렌더링해야 한다.
+ * useGoogleLogin은 GoogleOAuthProvider 안에서만 안전하게 실행 가능합니다.
+ * Client ID가 설정되지 않았을 경우 useGoogleLogin을 호출하면 예외가 발생하므로
+ * Inner 컴포넌트로 분리하여 isGoogleAuthConfigured일 때만 렌더링합니다.
  */
-export default function GoogleAuthCard() {
+function GoogleAuthButtons() {
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
@@ -30,28 +31,46 @@ export default function GoogleAuthCard() {
     });
 
     return (
+        <div className="mt-4 flex gap-[9px]">
+            <button
+                onClick={() => login()}
+                className="flex-1 h-12 border-0 rounded-xl bg-primary text-white text-sm font-bold active:scale-95 transition-transform"
+            >
+                Нэвтрэх
+            </button>
+            <button
+                onClick={() => login()}
+                className="flex-1 h-12 border border-line rounded-xl bg-surface text-ink text-sm font-bold active:scale-95 transition-transform"
+            >
+                Бүртгүүлэх
+            </button>
+        </div>
+    );
+}
+
+export default function GoogleAuthCard() {
+    if (!isGoogleAuthConfigured) {
+        return (
+            <div className="bg-surface border border-line rounded-2xl px-5 py-6">
+                <div className="text-base font-extrabold tracking-tight">Автомашинаа сонгоод захиалга өгөөрэй</div>
+                <div className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    Нэвтрэхгүйгээр ч зар үзэх, хадгалах, захиалга өгөх боломжтой.
+                </div>
+            </div>
+        );
+    }
+
+    return (
         <div className="bg-surface border border-line rounded-2xl px-5 py-6">
             <div className="text-base font-extrabold tracking-tight">Нэвтэрч захиалгаа хянаарай</div>
             <div className="mt-1.5 text-[13px] leading-relaxed text-muted">
                 Хадгалсан зар, захиалгын төлөв нэг дор.
             </div>
-            <div className="mt-4 flex gap-[9px]">
-                <button
-                    onClick={() => login()}
-                    className="flex-1 h-12 border-0 rounded-xl bg-primary text-white text-sm font-bold active:scale-95 transition-transform"
-                >
-                    Нэвтрэх
-                </button>
-                <button
-                    onClick={() => login()}
-                    className="flex-1 h-12 border border-line rounded-xl bg-surface text-ink text-sm font-bold active:scale-95 transition-transform"
-                >
-                    Бүртгүүлэх
-                </button>
-            </div>
+            <GoogleAuthButtons />
             <p className="mt-3.5 text-[11.5px] text-muted-2">
                 Google хаягаараа нэвтэрнэ. Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрч байна.
             </p>
         </div>
     );
 }
+
