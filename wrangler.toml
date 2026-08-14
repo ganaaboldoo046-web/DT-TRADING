@@ -4,14 +4,12 @@ compatibility_date = "2024-02-14"
 compatibility_flags = ["nodejs_compat"]
 
 # D1 Database
-# TODO: 배포 전 `wrangler d1 create dt-trading-db` 실행 후 database_id를 교체하세요.
 [[d1_databases]]
 binding = "DB"
 database_name = "dt-trading-db"
-database_id = "8dc651ff-a52b-4e79-9941-ca9da05b2c16"
+database_id = "8deb85d2-3605-4edb-9144-0e07371ce623"
 
 # R2 Storage
-# TODO: 배포 전 `wrangler r2 bucket create dt-trading-assets` 실행 후 이름을 맞추세요.
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "dt-trading-assets"
