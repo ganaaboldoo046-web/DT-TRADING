@@ -75,26 +75,29 @@ export default function AdminProductCreate() {
         loadData();
     }, [id]);
 
+    // 새로 추가한(아직 업로드 전) 미리보기인지 — 기존 R2/외부 URL과 구분
+    const isNewImage = (src: string) => src.startsWith('blob:') || src.startsWith('data:');
+
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const files = Array.from(e.target.files);
             setImageFiles(prev => [...prev, ...files]);
-
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    if (reader.result) {
-                        setImages(prev => [...prev, reader.result as string]);
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
+            // FileReader(base64) 대신 objectURL: 동기적이라 미리보기 순서가 파일 순서와 항상 일치
+            setImages(prev => [...prev, ...files.map(f => URL.createObjectURL(f))]);
+            e.target.value = '';
         }
     };
 
     const removeImage = (index: number) => {
-        setImages(images.filter((_, i) => i !== index));
-        setImageFiles(imageFiles.filter((_, i) => i !== index));
+        const target = images[index];
+        if (target && isNewImage(target)) {
+            // 편집 모드에선 기존 URL이 섞여 있어 images와 imageFiles의 인덱스가 다르다.
+            // 이 이미지가 새 이미지 중 몇 번째인지 세어 해당 파일만 제거한다.
+            const fileIdx = images.slice(0, index).filter(isNewImage).length;
+            setImageFiles(files => files.filter((_, i) => i !== fileIdx));
+            if (target.startsWith('blob:')) URL.revokeObjectURL(target);
+        }
+        setImages(imgs => imgs.filter((_, i) => i !== index));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -128,25 +131,20 @@ export default function AdminProductCreate() {
         setLoading(true);
 
         try {
-            // 1. Process and Upload Images to R2
+            // 1. 새 이미지는 WebP 변환(최대 1200px, 품질 0.8) 후 R2에 업로드하고,
+            //    기존 이미지 URL은 그대로 유지한다. base64는 어떤 경우에도 DB에 넣지 않는다.
             const uploadedImageUrls: string[] = [];
+            let fileIdx = 0;
 
-            for (let i = 0; i < images.length; i++) {
-                const img = images[i];
-                if (img.startsWith('/api/images/')) {
+            for (const img of images) {
+                if (isNewImage(img)) {
+                    const file = imageFiles[fileIdx++];
+                    if (!file) continue; // 대응하는 파일이 없으면 저장하지 않음
+                    const webpBlob = await convertToWebP(file);
+                    const url = await uploadImage(webpBlob);
+                    uploadedImageUrls.push(url);
+                } else {
                     uploadedImageUrls.push(img);
-                } else if (img.startsWith('data:')) {
-                    // Find matching file by index (roughly, based on how they were added)
-                    // Better to store File objects alongside images
-                    const file = imageFiles[i]; // This assumes 1:1 mapping which we maintain in state
-                    if (file) {
-                        const webpBlob = await convertToWebP(file);
-                        const url = await uploadImage(webpBlob);
-                        uploadedImageUrls.push(url);
-                    } else {
-                        // Fallback if file not found (unlikely)
-                        uploadedImageUrls.push(img);
-                    }
                 }
             }
 
