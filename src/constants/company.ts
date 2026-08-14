@@ -4,7 +4,7 @@ export const COMPANY = {
     tagline: 'AUTO EXPORT',
     logoShort: 'DT',
     copyright: '© 2026 DT Trading. All rights reserved.',
-    address: 'Инчон хот, Ённсү дүүрэг, Нынхөдэ-ро 192',
+    address: 'Кёнгидо, Сувон хот, Пёндон 22-17 (경기도 수원시 평동 22-17)',
     // 개인정보처리방침/이용약관 및 Google OAuth 동의 화면에 노출되는 공식 연락처
     email: 'sonorsinister@gmail.com',
     // 메뉴 연락처 카드
