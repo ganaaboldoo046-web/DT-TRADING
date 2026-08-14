@@ -102,9 +102,9 @@ export default function Home() {
                                 to={`/category/${c.id}`}
                                 className="flex-none h-11 pl-1.5 pr-4 border border-line rounded-[22px] bg-surface text-[13px] font-bold text-ink whitespace-nowrap flex items-center gap-2"
                             >
-                                <span className="w-8 h-8 flex-none rounded-full bg-line overflow-hidden flex items-center justify-center text-[10px] font-extrabold text-muted">
+                                <span className={`w-8 h-8 flex-none rounded-full overflow-hidden flex items-center justify-center text-[10px] font-extrabold text-muted ${c.image ? 'bg-white border border-line p-[3px]' : 'bg-line'}`}>
                                     {c.image
-                                        ? <img src={c.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                        ? <img src={c.image} alt="" className="w-full h-full object-contain" loading="lazy" />
                                         : c.name.slice(0, 2).toUpperCase()}
                                 </span>
                                 {c.name}
@@ -155,9 +155,9 @@ export default function Home() {
                                     to={`/category/${c.id}`}
                                     className="flex items-center gap-3 h-[62px] px-5 bg-surface border border-line rounded-2xl hover:border-primary transition-colors"
                                 >
-                                    <span className="w-[34px] h-[34px] flex-none rounded-full bg-line text-muted flex items-center justify-center text-xs font-extrabold tracking-tight overflow-hidden">
+                                    <span className={`w-[34px] h-[34px] flex-none rounded-full text-muted flex items-center justify-center text-xs font-extrabold tracking-tight overflow-hidden ${c.image ? 'bg-white border border-line p-1' : 'bg-line'}`}>
                                         {c.image
-                                            ? <img src={c.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                            ? <img src={c.image} alt="" className="w-full h-full object-contain" loading="lazy" />
                                             : c.name.slice(0, 2).toUpperCase()}
                                     </span>
                                     <span className="text-sm font-extrabold tracking-[0.02em]">{c.name}</span>

@@ -45,9 +45,9 @@ export default function Categories() {
                                 to={`/category/${c.id}`}
                                 className="bg-surface border border-line rounded-2xl overflow-hidden hover:border-primary transition-colors"
                             >
-                                <div className="aspect-[16/9] bg-surface-2 flex items-center justify-center overflow-hidden">
+                                <div className={`aspect-[16/9] flex items-center justify-center overflow-hidden ${c.image ? 'bg-white p-8' : 'bg-surface-2'}`}>
                                     {c.image ? (
-                                        <Image src={c.image} alt={c.name} className="w-full h-full object-cover" size="medium" />
+                                        <Image src={c.image} alt={c.name} className="w-full h-full object-contain" size="medium" />
                                     ) : (
                                         <span className="text-[11px] font-bold tracking-[0.12em] text-muted-3">ЗУРАГ</span>
                                     )}
