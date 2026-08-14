@@ -96,12 +96,12 @@ export default function CustomerReviews() {
                 setIsModalOpen(true); // Open modal after login
             } catch (error) {
                 console.error("Failed to fetch user info:", error);
-                alert("로그인 정보를 가져오는데 실패했습니다.");
+                alert("Нэвтрэх мэдээлэл авахад алдаа гарлаа.");
             }
         },
         onError: () => {
             console.error("Login Failed");
-            alert("로그인에 실패했습니다.");
+            alert("Нэвтрэхэд алдаа гарлаа.");
         }
     });
 

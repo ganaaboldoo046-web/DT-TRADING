@@ -255,8 +255,9 @@ function TickerEditor() {
         <div className="mt-10 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Тикер (хар туузан баннер)</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                PC 화면 상단의 검정 띠에 흐르는 문구입니다. <b>한 줄에 하나씩</b> 입력하세요.
-                비워두면 기본 문구가 표시됩니다.
+
+                PC дэлгэцийн дээд хэсгийн хар туузан дээр гүйдэг бичвэрүүд. <b>Мөр бүрт нэгийг</b> бичнэ үү.
+                Хоосон орхивол үндсэн бичвэрүүд харагдана.
             </p>
             <textarea
                 value={text}

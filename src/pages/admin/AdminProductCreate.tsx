@@ -295,9 +295,9 @@ export default function AdminProductCreate() {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">Дэлгэрэнгүй мэдээлэл</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label className="block">
-                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хөдөлгүүр (Engine, cc 포함)</span>
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хөдөлгүүр (cc-ээр)</span>
                             <input name="engine" value={formData.engine} onChange={handleChange} type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="1,998cc" />
-                            <span className="text-[11px] text-slate-400 mt-1 block">cc 숫자를 넣으면 특별소비세가 자동 계산됩니다 (예: 1,998cc)</span>
+                            <span className="text-[11px] text-slate-400 mt-1 block">cc тоог оруулбал онцгой албан татвар автоматаар тооцоологдоно (ж: 1,998cc)</span>
                         </label>
                         <label className="block">
                             <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 block">Хурдны хайрцаг (Transmission)</span>

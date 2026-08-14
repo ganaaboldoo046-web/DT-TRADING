@@ -187,8 +187,9 @@ function PricingSettingsCard() {
         <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
             <h3 className="font-bold text-slate-900 dark:text-white mb-1">Үнийн задаргааны тохиргоо</h3>
             <p className="text-xs text-slate-500 mb-5">
-                상세 페이지의 "Үнийн задаргаа"가 이 값으로 자동 계산됩니다.
-                특별소비세는 공식 세율표(배기량·연식·연료)로 자동 적용되어 설정할 필요가 없습니다.
+                Дэлгэрэнгүй хуудасны "Үнийн задаргаа" эдгээр утгаар автоматаар тооцоологдоно.
+                Онцгой албан татвар нь албан ёсны хүснэгтээр (мотор багтаамж · он · түлш) автоматаар
+                бодогддог тул энд тохируулах шаардлагагүй.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {field('serviceFee', 'Монгол үйлчилгээний шимтгэл', '₮')}

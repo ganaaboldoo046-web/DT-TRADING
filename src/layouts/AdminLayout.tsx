@@ -93,7 +93,7 @@ export default function AdminLayout() {
                     <div className="flex items-center gap-3 ml-auto">
                         <button
                             onClick={toggleTheme}
-                            aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+                            aria-label={theme === 'dark' ? 'Цайвар горим руу шилжих' : 'Бараан горим руу шилжих'}
                             title={theme === 'dark' ? 'Цайвар горим' : 'Бараан горим'}
                             className="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                         >

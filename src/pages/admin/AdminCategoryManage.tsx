@@ -87,7 +87,7 @@ export default function AdminCategoryManage() {
                 await fetchCategories();
             } catch (err) {
                 console.error('Delete failed:', err);
-                alert('Устгахад ал다а гарлаа.');
+                alert('Устгахад алдаа гарлаа.');
             }
         }
     };
